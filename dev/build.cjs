@@ -1,0 +1,255 @@
+// Prerenders the runtime markup into the static shells, so the HTML we ship —
+// and the HTML a crawler or a no-JS reader sees — already contains the page.
+// pages.js / reader.js stay in the document; their put() guard skips any
+// container that already has child nodes, so the prerender costs one repaint.
+//
+// Everything this script writes is wrapped in ssr markers, which makes the
+// build idempotent: re-running replaces the marked region instead of appending.
+const fs = require("fs");
+const path = require("path");
+
+const ROOT = path.join(__dirname, "..");
+const BASE = (process.env.BASE || "https://dreamofxm.github.io/bambooscroll").replace(/\/+$/, "");
+const PREFIX = new URL(BASE).pathname.replace(/\/$/, ""); // "" on a user/org root, "/bambooscroll" on a project page
+
+global.window = {};
+require(path.join(ROOT, "content/site.js"));
+require(path.join(ROOT, "content/ep01.js"));
+require(path.join(ROOT, "content/ep02.js"));
+const pages = require(path.join(ROOT, "pages.js"));
+const reader = require(path.join(ROOT, "reader.js"));
+const S = global.window.SITE, EP = global.window.EP01, E2 = global.window.EP02;
+
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+  .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+const url = (p) => BASE + "/" + String(p).replace(/^\/+/, "");
+
+// ---- marker-wrapped regions -------------------------------------------------
+
+const START = (id) => `<!--ssr:${id}-->`;
+const END = (id) => `<!--/ssr:${id}-->`;
+
+function fill(html, id, content) {
+  const s = START(id), e = END(id);
+  const si = html.indexOf(s), ei = html.indexOf(e);
+  if (si !== -1 && ei !== -1) return html.slice(0, si + s.length) + content + html.slice(ei);
+
+  const open = html.match(new RegExp(`<([a-zA-Z0-9]+)([^>]*\\bid="${id}"[^>]*)>`));
+  if (!open) throw new Error(`build: no container #${id}`);
+  const at = open.index + open[0].length;
+  const closed = new RegExp(`^\\s*</${open[1]}>`).test(html.slice(at));
+  if (!closed) throw new Error(`build: #${id} has content but no ssr markers — refusing to duplicate it`);
+  return html.slice(0, at) + s + content + e + html.slice(at);
+}
+
+// ---- structured data --------------------------------------------------------
+
+const crumb = (trail) => ({
+  "@type": "BreadcrumbList",
+  itemListElement: trail.map(([name, href], i) => {
+    const item = { "@type": "ListItem", position: i + 1, name };
+    if (href != null) item.item = url(href);
+    return item;
+  })
+});
+
+const personNode = (p, bare) => {
+  const n = { "@type": "Person", name: p.name, alternateName: p.hanzi, url: url("people/" + p.id + "/") };
+  if (!bare) {
+    n.description = p.role;
+    n.image = url(p.portrait.replace(/\.png$/, ".webp"));
+    const yrs = /^(\d+)–(\d+)$/.exec(p.years);
+    if (yrs) { n.birthDate = yrs[1]; n.deathDate = yrs[2]; }
+  }
+  return n;
+};
+
+const comicStory = (E, pth, og) => ({
+  "@type": "ComicStory", name: E.title, alternateName: E.subtitle, url: url(pth),
+  inLanguage: "en", genre: "History", image: url(og),
+  abstract: E.hook,
+  // no datePublished on purpose: the site is not public yet; set it at launch
+  author: { "@type": "Organization", name: "Bamboo Scroll", url: url("") },
+  character: E.people.map((q) => {
+    const p = S.people.find((s) => s.name === q.name);
+    return p ? personNode(p, true) : { "@type": "Person", name: q.name, alternateName: q.hanzi };
+  }),
+  isPartOf: { "@type": "WebSite", name: "Bamboo Scroll", url: url("") }
+});
+
+const HOME = ["Bamboo Scroll", "/"];
+
+const PAGES = [
+  {
+    path: "/", file: "index.html",
+    og: "assets/og-bamboo-scroll.jpg", ogAlt: "Three banners on three hills at dawn",
+    ld: () => [{
+      "@type": "WebSite", name: "Bamboo Scroll", alternateName: "竹簡", url: url(""),
+      description: "Free English webcomics of Chinese history, told only from the official histories.",
+      inLanguage: "en", image: url("assets/og-bamboo-scroll.jpg"),
+      publisher: { "@type": "Organization", name: "Bamboo Scroll", url: url("") }
+    }]
+  },
+  {
+    path: "/dynasty/three-kingdoms/", file: "dynasty/three-kingdoms/index.html",
+    og: "assets/og-three-kingdoms.jpg", ogAlt: "Two armies on two banks of the Yangtze",
+    ld: () => [{
+      "@type": "CollectionPage", name: "Three Kingdoms 三國 · Bamboo Scroll", url: url("dynasty/three-kingdoms/"),
+      about: { "@type": "Thing", name: "Three Kingdoms", alternateName: "三國" },
+      hasPart: [
+        { "@type": "ComicStory", name: EP.title, url: url("read/three-kingdoms/01/") },
+        { "@type": "ComicStory", name: E2.title, url: url("read/three-kingdoms/02/") }
+      ]
+    }, crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"]])]
+  },
+  {
+    path: "/people/", file: "people/index.html",
+    og: "assets/og-bamboo-scroll.jpg", ogAlt: "Three banners on three hills at dawn",
+    ld: () => [{
+      "@type": "CollectionPage", name: "People · Bamboo Scroll", url: url("people/"),
+      mainEntity: {
+        "@type": "ItemList",
+        itemListElement: S.people.map((p, i) => ({
+          "@type": "ListItem", position: i + 1, name: p.name, url: url("people/" + p.id + "/")
+        }))
+      }
+    }, crumb([HOME, ["People", "people/"]])]
+  },
+  ...S.people.map((p) => ({
+    path: "/people/" + p.id + "/", file: "people/" + p.id + "/index.html",
+    og: "assets/og-person-" + p.id.replace(/-/g, "") + ".jpg", ogAlt: "Portrait of " + p.name,
+    ld: () => [personNode(p), crumb([HOME, ["People", "people/"], [p.name, "people/" + p.id + "/"]])]
+  })),
+  {
+    path: "/glossary/", file: "glossary/index.html",
+    og: "assets/og-bamboo-scroll.jpg", ogAlt: "Three banners on three hills at dawn",
+    ld: () => [{ "@type": "WebPage", name: "Glossary · Bamboo Scroll", url: url("glossary/") },
+      crumb([HOME, ["Glossary", "glossary/"]])]
+  },
+  {
+    path: "/method/", file: "method/index.html",
+    og: "assets/og-bamboo-scroll.jpg", ogAlt: "Three banners on three hills at dawn",
+    ld: () => [{ "@type": "AboutPage", name: "Method · Bamboo Scroll", url: url("method/") },
+      crumb([HOME, ["Method", "method/"]])]
+  },
+  {
+    path: "/read/three-kingdoms/01/", file: "read/three-kingdoms/01/index.html",
+    og: "assets/og-fire-on-the-yangtze.jpg", ogAlt: "Warships in winter mist on the Yangtze, 208 CE",
+    ld: () => [comicStory(EP, "read/three-kingdoms/01/", "assets/og-fire-on-the-yangtze.jpg"),
+      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 1 · " + EP.title, "read/three-kingdoms/01/"]])]
+  },
+  {
+    path: "/read/three-kingdoms/02/", file: "read/three-kingdoms/02/index.html",
+    og: "assets/og-road-to-guandu.jpg", ogAlt: "Banners and camps of two armies facing each other across the plain at Guandu, 200 CE",
+    ld: () => [comicStory(E2, "read/three-kingdoms/02/", "assets/og-road-to-guandu.jpg"),
+      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 2 · " + E2.title, "read/three-kingdoms/02/"]])]
+  }
+];
+
+function seoBlock(html, pg) {
+  const title = (html.match(/<title>([\s\S]*?)<\/title>/) || [])[1].trim();
+  const description = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "";
+  const canonical = url(pg.path.replace(/^\//, ""));
+  const image = url(pg.og);
+  const graph = pg.ld().map((n) => Object.assign({ "@context": "https://schema.org" }, n));
+
+  const tags = [
+    `<link rel="canonical" href="${canonical}">`,
+    `<meta property="og:site_name" content="Bamboo Scroll">`,
+    `<meta property="og:type" content="${pg.path.startsWith("/read/") ? "article" : "website"}">`,
+    `<meta property="og:title" content="${esc(title)}">`,
+    `<meta property="og:description" content="${esc(description)}">`,
+    `<meta property="og:url" content="${canonical}">`,
+    `<meta property="og:image" content="${image}">`,
+    `<meta property="og:image:width" content="1200">`,
+    `<meta property="og:image:height" content="630">`,
+    `<meta property="og:image:alt" content="${esc(pg.ogAlt)}">`,
+    `<meta property="og:locale" content="en_US">`,
+    `<meta name="twitter:card" content="summary_large_image">`,
+    `<meta name="twitter:title" content="${esc(title)}">`,
+    `<meta name="twitter:description" content="${esc(description)}">`,
+    `<meta name="twitter:image" content="${image}">`,
+    `<script type="application/ld+json">${JSON.stringify(graph)}</script>`
+  ];
+  return "  " + START("seo") + "\n  " + tags.join("\n  ") + "\n  " + END("seo") + "\n";
+}
+
+function injectSeo(html, block) {
+  const s = START("seo"), e = END("seo");
+  const si = html.indexOf(s), ei = html.indexOf(e);
+  if (si !== -1 && ei !== -1) return html.slice(0, si) + block.trimStart() + html.slice(ei + e.length + 1);
+  return html.replace("</head>", block + "</head>");
+}
+
+// ---- build ------------------------------------------------------------------
+
+let written = 0;
+const DATA = ["content/site.js", "content/ep01.js", "content/ep02.js"].map((f) => path.join(ROOT, f));
+const iso = (ms) => new Date(ms).toISOString().slice(0, 10);
+
+for (const pg of PAGES) {
+  const file = path.join(ROOT, pg.file);
+  const before = fs.readFileSync(file, "utf8");
+  // newest mtime of what actually feeds the page, taken before we rewrite it
+  pg.lastmod = iso(Math.max(...DATA.concat(file).map((f) => fs.statSync(f).mtimeMs)));
+  let html = before;
+
+  const root = (html.match(/data-root="([^"]*)"/) || [])[1] || "./";
+  const param = (html.match(/data-param="([^"]*)"/) || [])[1] || null;
+  const page = (html.match(/data-page="([^"]*)"/) || [])[1];
+
+  const filled = [];
+  if (html.includes('id="app"')) {
+    pages.setContext(root, param);
+    for (const [id, markup] of [["nav", pages.nav()], ["app", pages.PAGES[page]()], ["foot", pages.foot()]]) {
+      html = fill(html, id, markup);
+      filled.push(id);
+    }
+  } else {
+    const epKey = (html.match(/data-ep="([^"]*)"/) || [])[1];
+    const out = reader.render(root, epKey);
+    for (const id of ["hero", "reader", "people", "myths", "sources"]) {
+      html = fill(html, id, out[id]);
+      filled.push(id);
+    }
+  }
+
+  html = injectSeo(html, seoBlock(html, pg));
+
+  if (!fs.existsSync(path.join(ROOT, pg.og))) throw new Error(`build: missing og image ${pg.og} — run npm run images`);
+  fs.writeFileSync(file, html);
+  written++;
+  console.log(`${pg.path}  ${(before.length / 1024).toFixed(1)}KB -> ${(html.length / 1024).toFixed(1)}KB  [${filled.join(",")}] +seo`);
+}
+
+// PNG masters stay local and are not published, so a .png reference — or a missing
+// derivative — is a broken image on the live site. Fail here rather than in the browser.
+const bad = [];
+for (const pg of PAGES) {
+  const html = fs.readFileSync(path.join(ROOT, pg.file), "utf8");
+  for (const m of html.matchAll(/(?:src|srcset)="([^"]+\.(?:png|avif|webp|jpg))"/g)) {
+    if (/\.png$/.test(m[1])) bad.push(`${pg.path} asks for a png master: ${m[1]}`);
+    else if (!fs.existsSync(path.join(ROOT, path.dirname(pg.file), m[1]))) bad.push(`${pg.path} missing image: ${m[1]}`);
+  }
+}
+for (const p of S.people) {
+  const w = p.portrait.replace(/\.png$/, ".webp");
+  if (!fs.existsSync(path.join(ROOT, w))) bad.push(`JSON-LD for ${p.id} missing portrait derivative: ${w}`);
+}
+if (bad.length) throw new Error("build: image audit failed\n  " + bad.join("\n  ") + "\n  run npm run images");
+console.log("image audit: no png masters referenced, every derivative present");
+
+// robots.txt is only honoured from the domain root; on a project page it is a
+// statement of intent for whoever mirrors the site, and the Disallow path has
+// to be written from the domain root, hence PREFIX.
+const robots = `User-agent: *\nDisallow: ${PREFIX}/dev/\n\nSitemap: ${BASE}/sitemap.xml\n`;
+fs.writeFileSync(path.join(ROOT, "robots.txt"), robots);
+
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n` +
+  `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+  PAGES.map((pg) => `  <url>\n    <loc>${url(pg.path.replace(/^\//, ""))}</loc>\n    <lastmod>${pg.lastmod}</lastmod>\n  </url>`).join("\n") +
+  `\n</urlset>\n`;
+fs.writeFileSync(path.join(ROOT, "sitemap.xml"), sitemap);
+
+console.log(`\n${written} pages prerendered, robots.txt + sitemap.xml written`);
+console.log(`base ${BASE}`);

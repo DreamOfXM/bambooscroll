@@ -1,0 +1,16 @@
+{
+  "name": "bambooscroll",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Free English webcomics of Chinese history, told only from the official histories.",
+  "scripts": {
+    "images": "node dev/images.cjs",
+    "build": "node dev/build.cjs",
+    "shots": "node dev/shots.cjs",
+    "serve": "python3 -m http.server 8901 --bind 127.0.0.1"
+  },
+  "devDependencies": {
+    "playwright": "^1.49.1",
+    "sharp": "^0.33.5"
+  }
+}
