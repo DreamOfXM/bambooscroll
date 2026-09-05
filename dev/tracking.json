@@ -1,0 +1,21 @@
+{
+  "_readme": [
+    "Paste your IDs into the empty strings below, then run: npm run build",
+    "Anything left empty is simply not emitted — the build still succeeds.",
+    "",
+    "ga4                    Google Analytics 4 Measurement ID, shaped like G-XXXXXXXXXX.",
+    "                       Get it: analytics.google.com -> Admin -> Data Streams -> your web stream -> Measurement ID.",
+    "                       (Creating the stream is what gives you the ID; there is no code to install by hand after that.)",
+    "",
+    "googleSiteVerification The token from Search Console -> Add property -> URL prefix -> 'HTML tag' verification.",
+    "                       Copy only the long string inside content=\"...\", not the whole <meta> tag.",
+    "",
+    "bingSiteVerification   Optional, same idea from bing.com/webmasters. Bing can also just import your",
+    "                       Search Console property, in which case leave this empty.",
+    "",
+    "None of these are secrets: all three end up in the public HTML, so this file is safe to commit."
+  ],
+  "ga4": "",
+  "googleSiteVerification": "",
+  "bingSiteVerification": ""
+}
