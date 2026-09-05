@@ -85,7 +85,7 @@
     home() {
       return `
       <div class="homehero">
-        ${pic("panels/ep01/20-three-banners.png", "Three banners on three hills at dawn")}
+        ${pic("panels/ep01/20-three-banners.png", "Three banners on three hills at dawn", 'fetchpriority="high" decoding="async"')}
         <div class="veil"></div>
         <div class="copy">
           <div class="kicker">Free English webcomics of Chinese history</div>

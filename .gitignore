@@ -6,3 +6,5 @@ node_modules/
 # they stay on this disk; the site publishes the avif/webp derivatives.
 panels/**/*.png
 assets/**/*.png
+# ...except the site icons, which browsers and search results fetch directly
+!assets/icon-*.png
