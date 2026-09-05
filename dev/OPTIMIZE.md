@@ -226,9 +226,13 @@ including commercial — please ask; we almost always say yes.
 - **图片已有懒加载**：`loading="lazy"` 出现在 `pages.js` 2 处、`reader.js` 2 处。
 - **阅读页有静态骨架**：章节标题、导语、"Next" 段落、页脚都是硬编码 HTML，
   P0-1 静态化时这部分不用重写，只需把注入的容器填上。
-- **AI 辅助作画已披露**：页脚写明 "Art is AI-assisted from our own original
-  character models. Research, script, sourcing and editing are human."
-  透明度够，**保留这段声明**，别删。
+- **页脚不声明 AI**（2026-09-05 项目负责人改的决定，覆盖本节早先的"保留"意见）：
+  统一措辞为 "Art is generated from our own original character models under our
+  own art direction. Research, script, sourcing and editing are human."
+  与 `method/` 页的 "Art and licence" 段一致；不主动提 AI，也不反过来声称手绘。
+  注意这段页脚文字**有三份副本**，改一处必须同时改三处：
+  `pages.js` 的 `foot()`、`read/three-kingdoms/01/index.html`、
+  `read/three-kingdoms/02/index.html`（阅读页页脚是硬编码的，build 不会重填）。
 - **`method/` 页有证据分级体系**（描述里提到 evidence tiers A…），
   这是全站可信度的锚点，P0-1 静态化时优先保证这页能被完整抓到。
 
