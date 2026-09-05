@@ -14,10 +14,16 @@ const PAGES = [
   { path: "/people/zhuge-liang/", name: "person-zhugeliang" },
   { path: "/people/yuan-shao/", name: "person-yuanshao" },
   { path: "/people/guan-yu/", name: "person-guanyu" },
+  { path: "/people/lu-xun/", name: "person-luxun" },
+  { path: "/people/sun-quan/", name: "person-sunquan" },
+  { path: "/people/huang-quan/", name: "person-huangquan" },
+  { path: "/people/sima-yi/", name: "person-simayi" },
   { path: "/glossary/", name: "glossary" },
   { path: "/method/", name: "method" },
   { path: "/read/three-kingdoms/01/", name: "read", panels: 20 },
-  { path: "/read/three-kingdoms/02/", name: "read02", panels: 16 }
+  { path: "/read/three-kingdoms/02/", name: "read02", panels: 16 },
+  { path: "/read/three-kingdoms/03/", name: "read03", panels: 16 },
+  { path: "/read/three-kingdoms/04/", name: "read04", panels: 16 }
 ];
 
 const warm = async (p) => {
@@ -96,7 +102,8 @@ const refs = (p) => p.evaluate(() => {
   if (broken.length) bad++;
 
   // anchor deep-link actually lands on the panel
-  for (const [pth, anchor] of [["/read/three-kingdoms/01/", "panel-12"], ["/read/three-kingdoms/02/", "panel-5"]]) {
+  for (const [pth, anchor] of [["/read/three-kingdoms/01/", "panel-12"], ["/read/three-kingdoms/02/", "panel-5"],
+    ["/read/three-kingdoms/03/", "panel-11"], ["/read/three-kingdoms/04/", "panel-14"]]) {
     const a = await desk.newPage();
     await a.goto(BASE + pth + "#" + anchor, { waitUntil: "networkidle" });
     await a.waitForTimeout(600);
@@ -117,7 +124,11 @@ const refs = (p) => p.evaluate(() => {
     ["/people/cao-cao/", "m-person", null], ["/read/three-kingdoms/01/", "m-read-hero", "#hero"],
     ["/read/three-kingdoms/01/", "m-read-row08", ".panel-row:nth-child(8)"],
     ["/read/three-kingdoms/02/", "m-read02-hero", "#hero"],
-    ["/read/three-kingdoms/02/", "m-read02-row11", ".panel-row:nth-child(11)"]]) {
+    ["/read/three-kingdoms/02/", "m-read02-row11", ".panel-row:nth-child(11)"],
+    ["/read/three-kingdoms/03/", "m-read03-hero", "#hero"],
+    ["/read/three-kingdoms/03/", "m-read03-row11", ".panel-row:nth-child(11)"],
+    ["/read/three-kingdoms/04/", "m-read04-hero", "#hero"],
+    ["/read/three-kingdoms/04/", "m-read04-row14", ".panel-row:nth-child(14)"]]) {
     const m = await mob.newPage();
     await m.goto(BASE + path, { waitUntil: "networkidle" });
     await warm(m);

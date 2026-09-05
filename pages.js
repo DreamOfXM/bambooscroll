@@ -2,7 +2,9 @@
   const S = window.SITE;
   const EPS = [
     { num: 1, key: "EP01", path: "read/three-kingdoms/01/" },
-    { num: 2, key: "EP02", path: "read/three-kingdoms/02/" }
+    { num: 2, key: "EP02", path: "read/three-kingdoms/02/" },
+    { num: 3, key: "EP03", path: "read/three-kingdoms/03/" },
+    { num: 4, key: "EP04", path: "read/three-kingdoms/04/" }
   ].filter((e) => window[e.key]);
   let ROOT = "./", PARAM = null;
   const u = (p) => ROOT + String(p == null ? "" : p).replace(/^\/+/, "");
@@ -102,7 +104,7 @@
       </section>
       <section class="block">
         <h2>Start here <span class="rule"></span></h2>
-        <p class="lede">Two episodes are live. Read either first — the years run the other way: Guandu in 200, then the Yangtze in 208.</p>
+        <p class="lede">Four episodes are live. The years run forward from Guandu — 200, 208, 222, 234 — read them in that order, or start anywhere.</p>
         <div class="epgrid">${EPS.map((e) => epCard(window[e.key], e.path)).join("")}</div>
       </section>
       <section class="block">
@@ -125,10 +127,6 @@
     dynasty() {
       const d = dyn(PARAM);
       const mine = S.people.filter((p) => p.dynasty === PARAM);
-      const planned = [
-        { title: "Fire at Yiling", year: "222 CE" },
-        { title: "The Last Campaign", year: "234 CE" }
-      ];
       return `
       <section class="block dynhead" style="--dync:${d.color}">
         <div class="kicker">Dynasty</div>
@@ -140,10 +138,6 @@
         <h2>Episodes <span class="rule"></span></h2>
         <div class="epgrid">
           ${EPS.map((e) => epCard(window[e.key], e.path)).join("")}
-          ${planned.map((p) => `<div class="epcard soon"><div class="ph"></div>
-            <div class="epbody"><div class="eptitle">${esc(p.title)}</div>
-            <div class="epsub">${esc(p.year)}</div>
-            <div class="epmeta">in production</div></div></div>`).join("")}
         </div>
       </section>
       <section class="block">

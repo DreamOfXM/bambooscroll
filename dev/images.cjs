@@ -100,6 +100,10 @@ const derive = async (src, stem, r) => {
     "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 1", "Fire on the Yangtze");
   await artCard("assets/og-road-to-guandu.jpg", "panels/ep02/00-cover.png", "centre",
     "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 2", "The Road to Guandu");
+  await artCard("assets/og-fire-at-yiling.jpg", "panels/ep03/00-cover.png", "centre",
+    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 3", "Fire at Yiling");
+  await artCard("assets/og-the-last-campaign.jpg", "panels/ep04/00-cover.png", "centre",
+    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 4", "The Last Campaign");
   for (const p of SITE.people) {
     await personCard(`assets/og-person-${p.id.replace(/-/g, "")}.jpg`, p);
   }

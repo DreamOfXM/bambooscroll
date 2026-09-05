@@ -16,9 +16,12 @@ global.window = {};
 require(path.join(ROOT, "content/site.js"));
 require(path.join(ROOT, "content/ep01.js"));
 require(path.join(ROOT, "content/ep02.js"));
+require(path.join(ROOT, "content/ep03.js"));
+require(path.join(ROOT, "content/ep04.js"));
 const pages = require(path.join(ROOT, "pages.js"));
 const reader = require(path.join(ROOT, "reader.js"));
 const S = global.window.SITE, EP = global.window.EP01, E2 = global.window.EP02;
+const E3 = global.window.EP03, E4 = global.window.EP04;
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
   .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
@@ -113,7 +116,9 @@ const PAGES = [
       about: { "@type": "Thing", name: "Three Kingdoms", alternateName: "三國" },
       hasPart: [
         { "@type": "ComicStory", name: EP.title, url: url("read/three-kingdoms/01/") },
-        { "@type": "ComicStory", name: E2.title, url: url("read/three-kingdoms/02/") }
+        { "@type": "ComicStory", name: E2.title, url: url("read/three-kingdoms/02/") },
+        { "@type": "ComicStory", name: E3.title, url: url("read/three-kingdoms/03/") },
+        { "@type": "ComicStory", name: E4.title, url: url("read/three-kingdoms/04/") }
       ]
     }, crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"]])]
   },
@@ -158,6 +163,18 @@ const PAGES = [
     og: "assets/og-road-to-guandu.jpg", ogAlt: "Banners and camps of two armies facing each other across the plain at Guandu, 200 CE",
     ld: (pg) => [comicStory(E2, "read/three-kingdoms/02/", "assets/og-road-to-guandu.jpg", pg.lastmod),
       crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 2 · " + E2.title, "read/three-kingdoms/02/"]])]
+  },
+  {
+    path: "/read/three-kingdoms/03/", file: "read/three-kingdoms/03/index.html",
+    og: "assets/og-fire-at-yiling.jpg", ogAlt: "Stockades burning along the wooded hills above the Yangtze gorges at Yiling, 222 CE",
+    ld: (pg) => [comicStory(E3, "read/three-kingdoms/03/", "assets/og-fire-at-yiling.jpg", pg.lastmod),
+      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 3 · " + E3.title, "read/three-kingdoms/03/"]])]
+  },
+  {
+    path: "/read/three-kingdoms/04/", file: "read/three-kingdoms/04/index.html",
+    og: "assets/og-the-last-campaign.jpg", ogAlt: "Two armies camped on the terraces above the Wei river at the Wuzhang Plains, autumn 234 CE",
+    ld: (pg) => [comicStory(E4, "read/three-kingdoms/04/", "assets/og-the-last-campaign.jpg", pg.lastmod),
+      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 4 · " + E4.title, "read/three-kingdoms/04/"]])]
   }
 ];
 
@@ -202,7 +219,7 @@ function injectSeo(html, block) {
 // ---- build ------------------------------------------------------------------
 
 let written = 0;
-const DATA = ["content/site.js", "content/ep01.js", "content/ep02.js"].map((f) => path.join(ROOT, f));
+const DATA = ["content/site.js", "content/ep01.js", "content/ep02.js", "content/ep03.js", "content/ep04.js"].map((f) => path.join(ROOT, f));
 const iso = (ms) => new Date(ms).toISOString().slice(0, 10);
 
 for (const pg of PAGES) {
@@ -301,6 +318,8 @@ const notFound = `<!doctype html>
       <p class="lede">Nothing lives at this address. What is live so far:</p>
       <ul class="sources">
         <li><a href="${BASE}/">Home</a><span class="when">dynasties · people · method</span></li>
+        <li><a href="${BASE}/read/three-kingdoms/04/">Episode 4 · ${esc(E4.title)}</a><span class="when">234 CE</span></li>
+        <li><a href="${BASE}/read/three-kingdoms/03/">Episode 3 · ${esc(E3.title)}</a><span class="when">222 CE</span></li>
         <li><a href="${BASE}/read/three-kingdoms/02/">Episode 2 · ${esc(E2.title)}</a><span class="when">200 CE</span></li>
         <li><a href="${BASE}/read/three-kingdoms/01/">Episode 1 · ${esc(EP.title)}</a><span class="when">208 CE</span></li>
       </ul>
