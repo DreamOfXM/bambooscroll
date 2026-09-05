@@ -19,7 +19,7 @@
 
   function hero() {
     return `
-    ${pic(EP.panels[0].art, EP.heroAlt || EP.panels[0].caption)}
+    ${pic(EP.panels[0].art, EP.heroAlt || EP.panels[0].caption, 'fetchpriority="high" decoding="async"')}
     <div class="veil"></div>
     <div class="copy">
       <div class="kicker">Bamboo Scroll · ${esc(EP.dynasty)} · Episode ${EP.order}</div>

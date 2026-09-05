@@ -9,7 +9,7 @@ const ROOT = path.join(__dirname, "..");
 const SOURCES = [
   ...fs.readdirSync(path.join(ROOT, "panels")).filter((d) => fs.statSync(path.join(ROOT, "panels", d)).isDirectory())
     .flatMap((d) => fs.readdirSync(path.join(ROOT, "panels", d)).filter((f) => f.endsWith(".png")).map((f) => `panels/${d}/${f}`)),
-  ...fs.readdirSync(path.join(ROOT, "assets")).filter((f) => f.endsWith(".png")).map((f) => "assets/" + f)
+  ...fs.readdirSync(path.join(ROOT, "assets")).filter((f) => f.endsWith(".png") && !f.startsWith("icon-")).map((f) => "assets/" + f)
 ];
 
 const kb = (p) => (fs.statSync(p).size / 1024).toFixed(0) + "KB";
@@ -103,6 +103,27 @@ const derive = async (src, stem, r) => {
   for (const p of SITE.people) {
     await personCard(`assets/og-person-${p.id.replace(/-/g, "")}.jpg`, p);
   }
+
+  // site icon: the ink mascot on paper. the master has a near-white background and no
+  // alpha channel, so knock the white out first; padding keeps maskable launchers safe.
+  const icon = async (out, size) => {
+    const { data, info } = await sharp(path.join(ROOT, "assets/mascot-mo.png"))
+      .ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i] > 244 && data[i + 1] > 244 && data[i + 2] > 244) data[i + 3] = 0;
+    }
+    const pad = Math.round(size * 0.16);
+    const mo = await sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } })
+      .resize(size - pad * 2, size - pad * 2, { fit: "inside" }).png().toBuffer();
+    const file = path.join(ROOT, out);
+    await sharp({ create: { width: size, height: size, channels: 4, background: "#f4f0e6" } })
+      .composite([{ input: mo, top: pad, left: pad }])
+      .png().toFile(file + ".tmp");
+    fs.renameSync(file + ".tmp", file);
+    console.log(`${out}  ${kb(file)}`);
+  };
+  await icon("assets/icon-512.png", 512);
+  await icon("assets/icon-180.png", 180);
 
   console.log(`\nlocal png masters ${(pngBytes / 1048576).toFixed(1)}MB (not published) -> published avif/webp ${(outBytes / 1048576).toFixed(1)}MB, incl. card variants`);
 })().catch((e) => { console.error(e); process.exit(1); });

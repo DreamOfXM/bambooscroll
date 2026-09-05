@@ -64,11 +64,14 @@ const personNode = (p, bare) => {
   return n;
 };
 
-const comicStory = (E, pth, og) => ({
+const LAUNCH = "2026-09-05"; // first public deployment on GitHub Pages
+
+const comicStory = (E, pth, og, modified) => ({
   "@type": "ComicStory", name: E.title, alternateName: E.subtitle, url: url(pth),
   inLanguage: "en", genre: "History", image: url(og),
   abstract: E.hook,
-  // no datePublished on purpose: the site is not public yet; set it at launch
+  datePublished: LAUNCH,
+  dateModified: modified || LAUNCH,
   author: { "@type": "Organization", name: "Bamboo Scroll", url: url("") },
   character: E.people.map((q) => {
     const p = S.people.find((s) => s.name === q.name);
@@ -87,7 +90,7 @@ const PAGES = [
       "@type": "WebSite", name: "Bamboo Scroll", alternateName: "竹簡", url: url(""),
       description: "Free English webcomics of Chinese history, told only from the official histories.",
       inLanguage: "en", image: url("assets/og-bamboo-scroll.jpg"),
-      publisher: { "@type": "Organization", name: "Bamboo Scroll", url: url("") }
+      publisher: { "@type": "Organization", name: "Bamboo Scroll", url: url(""), logo: url("assets/icon-512.png") }
     }]
   },
   {
@@ -135,13 +138,13 @@ const PAGES = [
   {
     path: "/read/three-kingdoms/01/", file: "read/three-kingdoms/01/index.html",
     og: "assets/og-fire-on-the-yangtze.jpg", ogAlt: "Warships in winter mist on the Yangtze, 208 CE",
-    ld: () => [comicStory(EP, "read/three-kingdoms/01/", "assets/og-fire-on-the-yangtze.jpg"),
+    ld: (pg) => [comicStory(EP, "read/three-kingdoms/01/", "assets/og-fire-on-the-yangtze.jpg", pg.lastmod),
       crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 1 · " + EP.title, "read/three-kingdoms/01/"]])]
   },
   {
     path: "/read/three-kingdoms/02/", file: "read/three-kingdoms/02/index.html",
     og: "assets/og-road-to-guandu.jpg", ogAlt: "Banners and camps of two armies facing each other across the plain at Guandu, 200 CE",
-    ld: () => [comicStory(E2, "read/three-kingdoms/02/", "assets/og-road-to-guandu.jpg"),
+    ld: (pg) => [comicStory(E2, "read/three-kingdoms/02/", "assets/og-road-to-guandu.jpg", pg.lastmod),
       crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 2 · " + E2.title, "read/three-kingdoms/02/"]])]
   }
 ];
@@ -151,9 +154,12 @@ function seoBlock(html, pg) {
   const description = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "";
   const canonical = url(pg.path.replace(/^\//, ""));
   const image = url(pg.og);
-  const graph = pg.ld().map((n) => Object.assign({ "@context": "https://schema.org" }, n));
+  const graph = pg.ld(pg).map((n) => Object.assign({ "@context": "https://schema.org" }, n));
 
   const tags = [
+    `<link rel="icon" type="image/png" sizes="512x512" href="${url("assets/icon-512.png")}">`,
+    `<link rel="apple-touch-icon" href="${url("assets/icon-180.png")}">`,
+    `<meta name="theme-color" content="#f4f0e6">`,
     `<link rel="canonical" href="${canonical}">`,
     `<meta property="og:site_name" content="Bamboo Scroll">`,
     `<meta property="og:type" content="${pg.path.startsWith("/read/") ? "article" : "website"}">`,
@@ -236,6 +242,9 @@ for (const p of S.people) {
   const w = p.portrait.replace(/\.png$/, ".webp");
   if (!fs.existsSync(path.join(ROOT, w))) bad.push(`JSON-LD for ${p.id} missing portrait derivative: ${w}`);
 }
+for (const f of ["assets/icon-512.png", "assets/icon-180.png"]) {
+  if (!fs.existsSync(path.join(ROOT, f))) bad.push(`missing site icon ${f}`);
+}
 if (bad.length) throw new Error("build: image audit failed\n  " + bad.join("\n  ") + "\n  run npm run images");
 console.log("image audit: no png masters referenced, every derivative present");
 
@@ -251,5 +260,44 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n` +
   `\n</urlset>\n`;
 fs.writeFileSync(path.join(ROOT, "sitemap.xml"), sitemap);
 
-console.log(`\n${written} pages prerendered, robots.txt + sitemap.xml written`);
+// GitHub Pages serves 404.html for any unknown path; without it a mistyped or
+// delisted URL lands on GitHub's own error page with no way back into the site.
+// Links are absolute because a 404 can occur at any depth.
+const notFound = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#f4f0e6">
+  <link rel="icon" type="image/png" sizes="512x512" href="${BASE}/assets/icon-512.png">
+  <title>Not found · Bamboo Scroll</title>
+  <link rel="stylesheet" href="${PREFIX}/style.css">
+</head>
+<body>
+  <header class="site"><div class="bar">
+    <a class="brand" href="${BASE}/">Bamboo Scroll<span class="hanzi">竹簡</span></a>
+    <nav class="links">
+      <a href="${BASE}/people/">People</a>
+      <a href="${BASE}/glossary/">Glossary</a>
+      <a href="${BASE}/method/">Method</a>
+    </nav>
+  </div></header>
+  <main>
+    <section class="block">
+      <h2>This scroll is missing</h2>
+      <p class="lede">Nothing lives at this address. What is live so far:</p>
+      <ul class="sources">
+        <li><a href="${BASE}/">Home</a><span class="when">dynasties · people · method</span></li>
+        <li><a href="${BASE}/read/three-kingdoms/02/">Episode 2 · ${esc(E2.title)}</a><span class="when">200 CE</span></li>
+        <li><a href="${BASE}/read/three-kingdoms/01/">Episode 1 · ${esc(EP.title)}</a><span class="when">208 CE</span></li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
+`;
+fs.writeFileSync(path.join(ROOT, "404.html"), notFound);
+
+console.log(`\n${written} pages prerendered, robots.txt + sitemap.xml + 404.html written`);
 console.log(`base ${BASE}`);
