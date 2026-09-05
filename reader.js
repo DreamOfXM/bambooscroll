@@ -4,7 +4,8 @@
   const WHO_COLOR = {
     caocao: "#7a2f22", liubei: "#5c6b33", zhouyu: "#33415c", zhugeliang: "#5f6a6a",
     zhangfei: "#2e2e2e", zhaoyun: "#6d7d8a", huanggai: "#7d5426", sunquan: "#54386b",
-    yuanshao: "#5b4a68", guanyu: "#3d5a45", xuyou: "#8a6a2f", zhanghe: "#3f4a5a", xunyou: "#4a6670"
+    yuanshao: "#5b4a68", guanyu: "#3d5a45", xuyou: "#8a6a2f", zhanghe: "#3f4a5a", xunyou: "#4a6670",
+    luxun: "#40655a", huangquan: "#6d5a2f", simayi: "#37414f"
   };
   const TAG_LABEL = { history: "In the sources", debated: "Debated", commentary: "Commentary", note: "Note" };
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
