@@ -1,0 +1,8 @@
+dev/shots/
+node_modules/
+.DS_Store
+
+# art masters: ~2MB each, only used as input to `npm run images`.
+# they stay on this disk; the site publishes the avif/webp derivatives.
+panels/**/*.png
+assets/**/*.png
