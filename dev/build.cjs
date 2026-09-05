@@ -24,6 +24,18 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
   .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 const url = (p) => BASE + "/" + String(p).replace(/^\/+/, "");
 
+// Verification and analytics are properties of the site, not of a page, so they are
+// configured once in dev/tracking.json and injected everywhere. An empty ID emits no
+// tag at all: the build must stay green while those accounts are still unopened.
+const TRACK = JSON.parse(fs.readFileSync(path.join(__dirname, "tracking.json"), "utf8"));
+const trackTags = [
+  TRACK.googleSiteVerification && `<meta name="google-site-verification" content="${esc(TRACK.googleSiteVerification)}">`,
+  TRACK.bingSiteVerification && `<meta name="msvalidate.01" content="${esc(TRACK.bingSiteVerification)}">`,
+  TRACK.ga4 && `<script async src="https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(TRACK.ga4)}"></script>`,
+  TRACK.ga4 && `<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${esc(TRACK.ga4)}');</script>`
+].filter(Boolean);
+const trackHead = trackTags.map((t) => "\n  " + t).join("");
+
 // ---- marker-wrapped regions -------------------------------------------------
 
 const START = (id) => `<!--ssr:${id}-->`;
@@ -156,7 +168,7 @@ function seoBlock(html, pg) {
   const image = url(pg.og);
   const graph = pg.ld(pg).map((n) => Object.assign({ "@context": "https://schema.org" }, n));
 
-  const tags = [
+  const tags = trackTags.concat([
     `<link rel="icon" type="image/png" sizes="512x512" href="${url("assets/icon-512.png")}">`,
     `<link rel="apple-touch-icon" href="${url("assets/icon-180.png")}">`,
     `<meta name="theme-color" content="#f4f0e6">`,
@@ -176,7 +188,7 @@ function seoBlock(html, pg) {
     `<meta name="twitter:description" content="${esc(description)}">`,
     `<meta name="twitter:image" content="${image}">`,
     `<script type="application/ld+json">${JSON.stringify(graph)}</script>`
-  ];
+  ]);
   return "  " + START("seo") + "\n  " + tags.join("\n  ") + "\n  " + END("seo") + "\n";
 }
 
@@ -269,7 +281,7 @@ const notFound = `<!doctype html>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
-  <meta name="theme-color" content="#f4f0e6">
+  <meta name="theme-color" content="#f4f0e6">${trackHead}
   <link rel="icon" type="image/png" sizes="512x512" href="${BASE}/assets/icon-512.png">
   <title>Not found · Bamboo Scroll</title>
   <link rel="stylesheet" href="${PREFIX}/style.css">
@@ -301,3 +313,4 @@ fs.writeFileSync(path.join(ROOT, "404.html"), notFound);
 
 console.log(`\n${written} pages prerendered, robots.txt + sitemap.xml + 404.html written`);
 console.log(`base ${BASE}`);
+console.log(`tracking: ga4 ${TRACK.ga4 || "NOT SET"} · google-verification ${TRACK.googleSiteVerification ? "set" : "NOT SET"} · bing ${TRACK.bingSiteVerification ? "set" : "NOT SET"}   (fill in dev/tracking.json)`);
