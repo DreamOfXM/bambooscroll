@@ -7,9 +7,11 @@ span{position:absolute;top:4px;left:4px;background:#000c;color:#fff;font:11px mo
 </style></head><body>
 <script src="../content/ep01.js"></script>
 <script src="../content/ep02.js"></script>
+<script src="../content/ep03.js"></script>
+<script src="../content/ep04.js"></script>
 <script>
 // the served derivatives, not the local png masters: this sheet is what readers get
-const arts=[].concat(...[EP01,EP02].map((e)=>e.panels.map((p)=>p.art)));
+const arts=[].concat(...[EP01,EP02,EP03,EP04].map((e)=>e.panels.map((p)=>p.art)));
 document.body.innerHTML=arts.map((a)=>`<figure><img loading="lazy" src="../${a.replace(/\.png$/,".webp")}"><span>${a}</span></figure>`).join("");
 </script>
 </body></html>

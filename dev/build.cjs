@@ -251,6 +251,11 @@ for (const pg of PAGES) {
 
   html = injectSeo(html, seoBlock(html, pg));
 
+  // Hosts that send no cache-control let browsers heuristic-cache the JS; stamping the
+  // page's own lastmod into each local script URL makes a content change bust that cache.
+  const v = pg.lastmod.replace(/-/g, "");
+  html = html.replace(/<script src="([^"?]+\.js)(?:\?v=\d+)?"/g, `<script src="$1?v=${v}"`);
+
   if (!fs.existsSync(path.join(ROOT, pg.og))) throw new Error(`build: missing og image ${pg.og} — run npm run images`);
   fs.writeFileSync(file, html);
   written++;
