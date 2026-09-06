@@ -13,9 +13,16 @@
     "bingSiteVerification   Optional, same idea from bing.com/webmasters. Bing can also just import your",
     "                       Search Console property, in which case leave this empty.",
     "",
-    "None of these are secrets: all three end up in the public HTML, so this file is safe to commit."
+    "None of these are secrets: all three end up in the public HTML, so this file is safe to commit.",
+    "",
+    "Deployed state (recorded here so it does not have to be rediscovered):",
+    "  GA4               account a406406522 / property p552914510 (bambooscroll) / web stream 15726381563",
+    "                    -> Measurement ID G-ZCHGJ1MF99, stream URL https://dreamofxm.github.io/bambooscroll",
+    "  Search Console    URL-prefix property https://dreamofxm.github.io/bambooscroll/ (HTML tag, verified 2026-09-06)",
+    "                    sitemap submitted: /bambooscroll/sitemap.xml",
+    "  Key event         episode_finish — fired once per page from reader.js when the last panel scrolls into view."
   ],
-  "ga4": "",
+  "ga4": "G-ZCHGJ1MF99",
   "googleSiteVerification": "98BWWTaS9-cz3RCrhu3tzQNUyZ-GA9P_Ir8cBboRrWM",
   "bingSiteVerification": ""
 }
