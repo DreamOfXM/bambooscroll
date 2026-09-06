@@ -47,7 +47,7 @@
     return `
     <div class="inner">
       <b>Bamboo Scroll</b> — free English webcomics of Chinese history, organised by dynasty and by person.<br>
-      Told only from the official histories. The novel <i>Romance of the Three Kingdoms</i> is used nowhere as a source; it appears only in Myth Checks, as a correction.<br>
+      Told only from the official histories. The Ming romances of the Han and of the Three Kingdoms, the anecdote collections, and the stage plays drawn from them are used nowhere as a source; they appear only in Myth Checks, as a correction.<br>
       Art is generated from our own original character models under our own art direction. Research, script, sourcing and editing are human. No artwork is taken from any other creator.<br>
       © 2026 Bamboo Scroll. All rights reserved. Teachers and students may print, share and translate these comics for non-commercial classroom use, with credit. For any other reuse — including commercial — please ask; we almost always say yes.<br>
       Free to read. No accounts. We count page views and how far you read — anonymous traffic statistics, nothing personal.
@@ -234,7 +234,7 @@
           <li>No scene enters an episode unless it traces to a named source, book and chapter.</li>
           <li>Quotations are translations of recorded words; paraphrase is never dressed as quotation.</li>
           <li>Figures of men, money and dead are claims in the sources, and are labelled as claims.</li>
-          <li>Where the source is literary reconstruction — speeches in the Sanguozhi, for instance — we say so.</li>
+          <li>Where the source is literary reconstruction — the speeches in the Shiji and the Hanshu, or in the Sanguozhi, for instance — we say so.</li>
           <li>Nothing is invented to fill a gap. A gap stays a gap.</li>
         </ul>
         <h2>Standing sources <span class="rule"></span></h2>
