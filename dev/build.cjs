@@ -162,7 +162,7 @@ const PAGES = [
   ...LINES.flatMap((L) => L.eps.map((e) => {
     const E = e.E;
     return {
-      path: "/" + e.path, file: e.path + "index.html",
+      path: "/" + e.path, file: e.path + "index.html", epKey: e.key,
       og: e.og, ogAlt: E.heroAlt || E.panels[0].caption,
       ld: (pg) => [comicStory(E, e.path, e.og, pg.lastmod),
         crumb([HOME, [L.name, "dynasty/" + L.dynasty + "/"], ["Episode " + e.num + " · " + E.title, e.path]])]
@@ -236,8 +236,14 @@ for (const pg of PAGES) {
       filled.push(id);
     }
   } else {
-    const epKey = (html.match(/data-ep="([^"]*)"/) || [])[1];
-    const out = reader.render(root, epKey);
+    if (!pg.epKey) throw new Error(`build: ${pg.file} is a reader page with no registry episode behind it`);
+    // The registry decides what a page shows. Reading the key off the shell instead let a
+    // shell that forgot data-ep fall through to reader.js's default and quietly prerender
+    // another episode, so the stamp below is what keeps the shipped body tag honest.
+    html = html.replace(/<body\b[^>]*>/, (tag) =>
+      /data-ep="[^"]*"/.test(tag) ? tag.replace(/data-ep="[^"]*"/, `data-ep="${pg.epKey}"`)
+        : tag.replace(/>$/, ` data-ep="${pg.epKey}">`));
+    const out = reader.render(root, pg.epKey);
     for (const id of ["hero", "reader", "people", "myths", "sources"]) {
       html = fill(html, id, out[id]);
       filled.push(id);

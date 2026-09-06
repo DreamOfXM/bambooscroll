@@ -107,7 +107,10 @@
   const api = {
     render(root, epKey) {
       ROOT = root || "./";
-      EP = window[epKey || "EP01"] || window.EP01;
+      EP = window[epKey];
+      // No default episode: falling back used to render a different story under a correct
+      // title. Throwing leaves the prerendered markup on screen, which is the right failure.
+      if (!EP) throw new Error("reader: no episode loaded for key " + epKey);
       return { hero: hero(), reader: reader(), people: people(), myths: myths(), sources: sources() };
     }
   };
