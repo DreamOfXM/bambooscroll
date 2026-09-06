@@ -104,6 +104,22 @@ const derive = async (src, stem, r) => {
     "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 3", "Fire at Yiling");
   await artCard("assets/og-the-last-campaign.jpg", "panels/ep04/00-cover.png", "centre",
     "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 4", "The Last Campaign");
+  await artCard("assets/og-the-pass-and-the-river.jpg", "panels/ep05/00-cover.png", "centre",
+    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 5", "The Pass and the River");
+  await artCard("assets/og-the-city-and-the-ford.jpg", "panels/ep06/00-cover.png", "centre",
+    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 6", "The City and the Ford");
+  await artCard("assets/og-the-heights-above-the-river.jpg", "panels/ep07/00-cover.png", "centre",
+    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 7", "The Heights Above the River");
+  await artCard("assets/og-high-water.jpg", "panels/ep08/00-cover.png", "centre",
+    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 8", "High Water");
+  await artCard("assets/og-the-bait-at-shiting.jpg", "panels/ep09/00-cover.png", "centre",
+    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 9", "The Bait at Shiting");
+  await artCard("assets/og-the-gates-at-dawn.jpg", "panels/ep10/00-cover.png", "centre",
+    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 10", "The Gates at Dawn");
+  await artCard("assets/og-the-gate-and-the-trackless-road.jpg", "panels/ep11/00-cover.png", "centre",
+    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 11", "The Gate and the Trackless Road");
+  await artCard("assets/og-the-fall-of-wu.jpg", "panels/ep12/00-cover.png", "centre",
+    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 12", "The Fall of Wu / The River is One");
   for (const p of SITE.people) {
     await personCard(`assets/og-person-${p.id.replace(/-/g, "")}.jpg`, p);
   }

@@ -4,12 +4,24 @@ require("../content/ep01.js");
 require("../content/ep02.js");
 require("../content/ep03.js");
 require("../content/ep04.js");
+require("../content/ep05.js");
+require("../content/ep06.js");
+require("../content/ep07.js");
+require("../content/ep08.js");
+require("../content/ep09.js");
+require("../content/ep10.js");
+require("../content/ep11.js");
+require("../content/ep12.js");
 const fs = require("fs"), path = require("path");
 const ROOT = path.join(__dirname, "..");
 const S = window.SITE;
 const EPKEY = {
   "read/three-kingdoms/01/": "EP01", "read/three-kingdoms/02/": "EP02",
-  "read/three-kingdoms/03/": "EP03", "read/three-kingdoms/04/": "EP04"
+  "read/three-kingdoms/03/": "EP03", "read/three-kingdoms/04/": "EP04",
+  "read/three-kingdoms/05/": "EP05", "read/three-kingdoms/06/": "EP06",
+  "read/three-kingdoms/07/": "EP07", "read/three-kingdoms/08/": "EP08",
+  "read/three-kingdoms/09/": "EP09", "read/three-kingdoms/10/": "EP10",
+  "read/three-kingdoms/11/": "EP11", "read/three-kingdoms/12/": "EP12"
 };
 let bad = 0;
 const fail = (m) => { console.log("  ! " + m); bad++; };
@@ -22,7 +34,7 @@ const WHO_COLOR = {};
 for (const m of whoBlock[1].matchAll(/([a-z]+)\s*:/g)) WHO_COLOR[m[1]] = true;
 console.log("WHO_COLOR keys:", Object.keys(WHO_COLOR).join(" "));
 
-for (const k of ["EP01", "EP02", "EP03", "EP04"]) {
+for (const k of ["EP01", "EP02", "EP03", "EP04", "EP05", "EP06", "EP07", "EP08", "EP09", "EP10", "EP11", "EP12"]) {
   const E = window[k];
   console.log(k, E.id, E.title, "panels=" + E.panels.length, "myths=" + E.myths.length, "sources=" + E.sources.length);
   E.panels.forEach((p, i) => {
