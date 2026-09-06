@@ -40,12 +40,14 @@ const LINES = S.lines.map((L) => {
 const EPKEY = {};
 for (const L of LINES) for (const e of L.eps) EPKEY[e.path] = e.key;
 
-// WHO_COLOR is private to reader.js's closure; scrape its keys from the source.
+// reader.js resolves a speaker's colour from the manifest (who = person id without
+// hyphens) plus its EXTRA block for panel speakers outside the cast. Mirror that here.
 const rsrc = fs.readFileSync(path.join(ROOT, "reader.js"), "utf8");
-const whoBlock = /WHO_COLOR\s*=\s*\{([\s\S]*?)\n\s*\}/.exec(rsrc);
-if (!whoBlock) { console.log("  ! could not find WHO_COLOR in reader.js"); process.exit(1); }
+const extraBlock = /EXTRA\s*=\s*\{([\s\S]*?)\n\s*\}/.exec(rsrc);
+if (!extraBlock) { console.log("  ! could not find EXTRA in reader.js"); process.exit(1); }
 const WHO_COLOR = {};
-for (const m of whoBlock[1].matchAll(/([a-z]+)\s*:/g)) WHO_COLOR[m[1]] = true;
+for (const m of extraBlock[1].matchAll(/([a-z]+)\s*:/g)) WHO_COLOR[m[1]] = true;
+for (const p of S.people) if (p.color) WHO_COLOR[p.id.replace(/-/g, "")] = true;
 console.log("lines:", LINES.map((L) => L.dynasty + "(" + L.eps.length + ")").join(" "));
 console.log("WHO_COLOR keys:", Object.keys(WHO_COLOR).join(" "));
 

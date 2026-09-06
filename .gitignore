@@ -8,5 +8,6 @@ panels/**/*.png
 assets/**/*.png
 # ...except the site icons, which browsers and search results fetch directly
 !assets/icon-*.png
-# art generation prompts: working files, never published (same as ep01–04)
-panels/**/_imagegen-prompts.json
+# art generation working files (prompts, reroll logs, QC reports): never published
+panels/**/_*
+assets/_*

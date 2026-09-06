@@ -4,12 +4,16 @@
   // The manifest owns a person's identity (hanzi, years, portrait, colour); an episode
   // names them and may add a role line of its own.
   const S = window.SITE || { people: [] };
-  const WHO_COLOR = {
-    caocao: "#7a2f22", liubei: "#5c6b33", zhouyu: "#33415c", zhugeliang: "#5f6a6a",
-    zhangfei: "#2e2e2e", zhaoyun: "#6d7d8a", huanggai: "#7d5426", sunquan: "#54386b",
-    yuanshao: "#5b4a68", guanyu: "#3d5a45", xuyou: "#8a6a2f", zhanghe: "#3f4a5a", xunyou: "#4a6670",
-    luxun: "#40655a", huangquan: "#6d5a2f", simayi: "#37414f"
+  // A bubble's `who` is a cast id without hyphens, so the manifest's own colour wins;
+  // EXTRA is only for speakers named in a panel who are deliberately not in the cast.
+  const EXTRA = {
+    denggong: "#6a6152", guji: "#4f6356", zhuyun: "#7a5f3a", liuxiang: "#4a5b6b", yizhizi: "#6b4a4a",
+    chanyu: "#6d7d8a", zhaoxin: "#5c6b33", dinggong: "#37414f", gengchun: "#5b4a68", oldclerk: "#6d5a2f",
+    gateofficer: "#6a5a4a", shizhe: "#705a3f", lingdi: "#54386b", zuofeng: "#7d5426",
+    zhangfei: "#2e2e2e", huanggai: "#7a4a3a", xunyou: "#3a5560", xuyou: "#6d5a2f", zhanghe: "#4f6356"
   };
+  const WHO_COLOR = Object.assign({}, EXTRA);
+  for (const p of S.people) if (p.color) WHO_COLOR[p.id.replace(/-/g, "")] = p.color;
   const TAG_LABEL = { history: "In the sources", debated: "Debated", commentary: "Commentary", note: "Note" };
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
