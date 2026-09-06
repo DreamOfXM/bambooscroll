@@ -126,4 +126,19 @@
   // either way the browser has already tried to honour the fragment before they existed
   const target = location.hash && document.getElementById(location.hash.slice(1));
   if (target) requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+
+  const rows = document.querySelectorAll(".panel-row");
+  const last = rows[rows.length - 1];
+  if (last && "IntersectionObserver" in window) {
+    let done = false;
+    const io = new IntersectionObserver((entries) => {
+      if (done || !entries.some((e) => e.isIntersecting)) return;
+      done = true;
+      io.disconnect();
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "episode_finish", { episode: EP.order, panels: EP.panels.length });
+      }
+    }, { threshold: 0.5 });
+    io.observe(last);
+  }
 })();

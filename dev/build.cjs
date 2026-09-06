@@ -221,6 +221,9 @@ function injectSeo(html, block) {
 let written = 0;
 const DATA = ["content/site.js", "content/ep01.js", "content/ep02.js", "content/ep03.js", "content/ep04.js"].map((f) => path.join(ROOT, f));
 const iso = (ms) => new Date(ms).toISOString().slice(0, 10);
+// Loaded by every page in the browser, but not content: kept out of lastmod (which feeds
+// sitemap.xml) and folded into the cache-buster instead, so a script-only edit still busts.
+const RUNTIME = iso(Math.max(...["pages.js", "reader.js"].map((f) => fs.statSync(path.join(ROOT, f)).mtimeMs)));
 
 for (const pg of PAGES) {
   const file = path.join(ROOT, pg.file);
@@ -252,8 +255,9 @@ for (const pg of PAGES) {
   html = injectSeo(html, seoBlock(html, pg));
 
   // Hosts that send no cache-control let browsers heuristic-cache the JS; stamping the
-  // page's own lastmod into each local script URL makes a content change bust that cache.
-  const v = pg.lastmod.replace(/-/g, "");
+  // newer of the page's content date and the shared scripts' mtime into each local script
+  // URL makes any change — content or runtime — bust that cache.
+  const v = (pg.lastmod > RUNTIME ? pg.lastmod : RUNTIME).replace(/-/g, "");
   html = html.replace(/<script src="([^"?]+\.js)(?:\?v=\d+)?"/g, `<script src="$1?v=${v}"`);
 
   if (!fs.existsSync(path.join(ROOT, pg.og))) throw new Error(`build: missing og image ${pg.og} — run npm run images`);
