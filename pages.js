@@ -4,7 +4,15 @@
     { num: 1, key: "EP01", path: "read/three-kingdoms/01/" },
     { num: 2, key: "EP02", path: "read/three-kingdoms/02/" },
     { num: 3, key: "EP03", path: "read/three-kingdoms/03/" },
-    { num: 4, key: "EP04", path: "read/three-kingdoms/04/" }
+    { num: 4, key: "EP04", path: "read/three-kingdoms/04/" },
+    { num: 5, key: "EP05", path: "read/three-kingdoms/05/" },
+    { num: 6, key: "EP06", path: "read/three-kingdoms/06/" },
+    { num: 7, key: "EP07", path: "read/three-kingdoms/07/" },
+    { num: 8, key: "EP08", path: "read/three-kingdoms/08/" },
+    { num: 9, key: "EP09", path: "read/three-kingdoms/09/" },
+    { num: 10, key: "EP10", path: "read/three-kingdoms/10/" },
+    { num: 11, key: "EP11", path: "read/three-kingdoms/11/" },
+    { num: 12, key: "EP12", path: "read/three-kingdoms/12/" }
   ].filter((e) => window[e.key]);
   let ROOT = "./", PARAM = null;
   const u = (p) => ROOT + String(p == null ? "" : p).replace(/^\/+/, "");
@@ -104,7 +112,7 @@
       </section>
       <section class="block">
         <h2>Start here <span class="rule"></span></h2>
-        <p class="lede">Four episodes are live. The years run forward from Guandu — 200, 208, 222, 234 — read them in that order, or start anywhere.</p>
+        <p class="lede">Twelve episodes are live, running the whole arc of the age from Guandu (200) to the fall of Wu (280) — read them in order, or start anywhere.</p>
         <div class="epgrid">${EPS.map((e) => epCard(window[e.key], e.path)).join("")}</div>
       </section>
       <section class="block">
