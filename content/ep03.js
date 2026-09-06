@@ -8,10 +8,10 @@ window.EP03 = {
   hook: "Grief took Jing province and two of his sworn brothers; the war to take them back took four hundred li of stockades, one night of fire, and the emperor himself.",
   heroAlt: "Stockades burning along the wooded hills above the Yangtze gorges at Yiling, 222 CE",
   people: [
-    { id: "liubei", name: "Liu Bei", hanzi: "劉備", years: "161–223", role: "Came east with everything Shu had to recover Jing province. Lost the line, the army and, within the year, his life.", portrait: "assets/portrait-liubei.png" },
-    { id: "luxun", name: "Lu Xun", hanzi: "陸遜", years: "183–245", role: "A scholar made grand commander at thirty-nine. Waited six months against his own generals' contempt, then burned the line in a night.", portrait: "assets/portrait-luxun.png" },
-    { id: "sunquan", name: "Sun Quan", hanzi: "孫權", years: "182–252", role: "Bought the north's neutrality on paper to take Jing province in fact, then chose a scholar over his oldest generals.", portrait: "assets/portrait-sunquan.png" },
-    { id: "huangquan", name: "Huang Quan", hanzi: "黃權", years: "d. 240", role: "Argued against the war, commanded its northern bank, was cut off by the fire, and ended a honoured general of Wei.", portrait: "assets/portrait-huangquan.png" }
+    { name: "Liu Bei", role: "Came east with everything Shu had to recover Jing province. Lost the line, the army and, within the year, his life." },
+    { name: "Lu Xun", role: "A scholar made grand commander at thirty-nine. Waited six months against his own generals' contempt, then burned the line in a night." },
+    { name: "Sun Quan", role: "Bought the north's neutrality on paper to take Jing province in fact, then chose a scholar over his oldest generals." },
+    { name: "Huang Quan", role: "Argued against the war, commanded its northern bank, was cut off by the fire, and ended a honoured general of Wei." }
   ],
   panels: [
     {

@@ -8,10 +8,10 @@ window.EP01 = {
   hook: "One river. Three warlords. A fire that decided China would not be united for sixty years.",
   heroAlt: "Warships in winter mist on the Yangtze, 208 CE",
   people: [
-    { id: "caocao", name: "Cao Cao", hanzi: "曹操", years: "155–220", role: "Chancellor of Han, master of the north. Came south to finish the empire in one campaign.", portrait: "assets/portrait-caocao.png" },
-    { id: "liubei", name: "Liu Bei", hanzi: "劉備", years: "161–223", role: "A claimant with a famous name and almost nothing else. Began this year in flight; ended it with a province.", portrait: "assets/portrait-liubei.png" },
-    { id: "zhouyu", name: "Zhou Yu", hanzi: "周瑜", years: "175–210", role: "Chief commander of Wu. Read Cao Cao's army correctly and burned it. Died of illness in 210, aged 36.", portrait: "assets/portrait-zhouyu.png" },
-    { id: "zhugeliang", name: "Zhuge Liang", hanzi: "諸葛亮", years: "181–234", role: "Liu Bei's strategist, 27 years old. Negotiated the alliance that made the battle possible.", portrait: "assets/portrait-zhugeliang.png" }
+    { name: "Cao Cao", role: "Chancellor of Han, master of the north. Came south to finish the empire in one campaign." },
+    { name: "Liu Bei", role: "A claimant with a famous name and almost nothing else. Began this year in flight; ended it with a province." },
+    { name: "Zhou Yu", role: "Chief commander of Wu. Read Cao Cao's army correctly and burned it. Died of illness in 210, aged 36." },
+    { name: "Zhuge Liang", role: "Liu Bei's strategist, 27 years old. Negotiated the alliance that made the battle possible." }
   ],
   panels: [
     {

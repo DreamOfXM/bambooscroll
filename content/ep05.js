@@ -8,11 +8,11 @@ window.EP05 = {
   hook: "An announced march through Guanzhong brought ten warlords to arms at a single pass; the war that followed was won by a saddle held against arrows, a wall of frozen sand, and one letter full of erasures.",
   heroAlt: "The great rammed-earth gate of Tong Pass between the Yellow River and the mountains, banners of the Guanzhong coalition before it, 211 CE",
   people: [
-    { id: "caocao", name: "Cao Cao", hanzi: "曹操", years: "155–220", role: "Announced a march against Zhang Lu through Guanzhong, and received the rising he could use. Crossed the river under arrows, and won the war with one letter.", portrait: "assets/portrait-caocao.png" },
-    { id: "ma-chao", name: "Ma Chao", hanzi: "馬超", years: "176–222", role: "Frontier warlord of Liang Province, head of the coalition at thirty-five. Rose while his father sat hostage at Ye, broke at Tong Pass, and died in Shu.", portrait: "assets/portrait-machao.png" },
-    { id: "han-sui", name: "Han Sui", hanzi: "韓遂", years: "d. 215", role: "Old fox of the western frontier, thirty years in arms. His long acquaintance with Cao Cao became the wedge that split the coalition.", portrait: "assets/portrait-hansui.png" },
-    { id: "jia-xu", name: "Jia Xu", hanzi: "賈詡", years: "147–223", role: "The coldest counsellor of the age. Answered a request for a battle plan with two words — part them — and won the war with a doctored letter.", portrait: "assets/portrait-jiaxu.png" },
-    { id: "xu-chu", name: "Xu Chu", hanzi: "許褚", years: "d. c. 230", role: "Cao Cao's bodyguard, a man strong enough to drag an ox by the tail. At the river crossing he held up a saddle against the arrows and cut the clinging men from the boat.", portrait: "assets/portrait-xuchu.png" }
+    { name: "Cao Cao", role: "Announced a march against Zhang Lu through Guanzhong, and received the rising he could use. Crossed the river under arrows, and won the war with one letter." },
+    { name: "Ma Chao", role: "Frontier warlord of Liang Province, head of the coalition at thirty-five. Rose while his father sat hostage at Ye, broke at Tong Pass, and died in Shu." },
+    { name: "Han Sui", role: "Old fox of the western frontier, thirty years in arms. His long acquaintance with Cao Cao became the wedge that split the coalition." },
+    { name: "Jia Xu", role: "The coldest counsellor of the age. Answered a request for a battle plan with two words — part them — and won the war with a doctored letter." },
+    { name: "Xu Chu", role: "Cao Cao's bodyguard, a man strong enough to drag an ox by the tail. At the river crossing he held up a saddle against the arrows and cut the clinging men from the boat." }
   ],
   panels: [
     {

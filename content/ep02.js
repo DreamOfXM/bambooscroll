@@ -8,10 +8,10 @@ window.EP02 = {
   hook: "Eight years before the Yangtze burned, Cao Cao won the north with the shorter supply line and the better decisions — and then burned his own officers' treason unread.",
   heroAlt: "Banners and camps of two armies facing each other across the plain at Guandu, 200 CE",
   people: [
-    { id: "caocao", name: "Cao Cao", hanzi: "曹操", years: "155–220", role: "Held the line at Guandu with fewer provinces, less grain, and every decision that mattered.", portrait: "assets/portrait-caocao.png" },
-    { id: "yuanshao", name: "Yuan Shao", hanzi: "袁紹", years: "d. 202", role: "Heir of the Yuan clan of Runan, master of four provinces north of the river. Lost the one battle that decided the north.", portrait: "assets/portrait-yuanshao.png" },
-    { id: "guanyu", name: "Guan Yu", hanzi: "關羽", years: "d. 220", role: "In 200 a general in Cao Cao's camp. Ended Yan Liang at Boma, then went back to Liu Bei.", portrait: "assets/portrait-guanyu.png" },
-    { id: "liubei", name: "Liu Bei", hanzi: "劉備", years: "161–223", role: "Yuan Shao's guest and Cao Cao's problem; sent south to raise trouble in Cao Cao's rear.", portrait: "assets/portrait-liubei.png" }
+    { name: "Cao Cao", role: "Held the line at Guandu with fewer provinces, less grain, and every decision that mattered." },
+    { name: "Yuan Shao", role: "Heir of the Yuan clan of Runan, master of four provinces north of the river. Lost the one battle that decided the north." },
+    { name: "Guan Yu", role: "In 200 a general in Cao Cao's camp. Ended Yan Liang at Boma, then went back to Liu Bei." },
+    { name: "Liu Bei", role: "Yuan Shao's guest and Cao Cao's problem; sent south to raise trouble in Cao Cao's rear." }
   ],
   panels: [
     {

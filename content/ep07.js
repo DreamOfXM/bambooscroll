@@ -8,11 +8,11 @@ window.EP07 = {
   hook: "Two years, one river crossing, and one charge downhill with the drums rolling — the campaign that took Hanzhong from Cao Cao was won by an old general and planned by a strategist the novel gave to someone else.",
   heroAlt: "Banners of Liu Bei's army on the heights of Mount Dingjun above the Mian River, Xiahou Yuan's camp among sharpened stakes below, 219 CE",
   people: [
-    { id: "liubei", name: "Liu Bei", hanzi: "劉備", years: "161–223", role: "Claimant of the house of Han in Shu. Marched north for the gate that shielded his province, held the heights against Cao Cao himself, and took a king's title in Hanzhong.", portrait: "assets/portrait-liubei.png" },
-    { id: "fa-zheng", name: "Fa Zheng", hanzi: "法正", years: "176–220", role: "Chief strategist of the campaign. Argued for the march on Hanzhong, planned the stroke at Dingjun, and became Prefect of the Masters of Writing in the new kingdom; died the year after the victory.", portrait: "assets/portrait-fazheng.png" },
-    { id: "huang-zhong", name: "Huang Zhong", hanzi: "黃忠", years: "d. 220", role: "Liu Bei's veteran general. Charged down Mount Dingjun with the drums rolling in 219, broke Xiahou Yuan's army, and slew him.", portrait: "assets/portrait-huangzhong.png" },
-    { id: "xiahou-yuan", name: "Xiahou Yuan", hanzi: "夏侯淵", years: "d. 219", role: "Cao Cao's general in the west, of whom his soldiers said five hundred li in three days. Held Hanzhong for four years; died beneath the heights of Dingjun.", portrait: "assets/portrait-xiahouyuan.png" },
-    { id: "caocao", name: "Cao Cao", hanzi: "曹操", years: "155–220", role: "Master of the north. Left two generals to hold Hanzhong for him, came in person to save it, and went home without a battle.", portrait: "assets/portrait-caocao.png" }
+    { name: "Liu Bei", role: "Claimant of the house of Han in Shu. Marched north for the gate that shielded his province, held the heights against Cao Cao himself, and took a king's title in Hanzhong." },
+    { name: "Fa Zheng", role: "Chief strategist of the campaign. Argued for the march on Hanzhong, planned the stroke at Dingjun, and became Prefect of the Masters of Writing in the new kingdom; died the year after the victory." },
+    { name: "Huang Zhong", role: "Liu Bei's veteran general. Charged down Mount Dingjun with the drums rolling in 219, broke Xiahou Yuan's army, and slew him." },
+    { name: "Xiahou Yuan", role: "Cao Cao's general in the west, of whom his soldiers said five hundred li in three days. Held Hanzhong for four years; died beneath the heights of Dingjun." },
+    { name: "Cao Cao", role: "Master of the north. Left two generals to hold Hanzhong for him, came in person to save it, and went home without a battle." }
   ],
   panels: [
     {

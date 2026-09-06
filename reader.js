@@ -1,6 +1,9 @@
 (function () {
   let EP = null;
   let ROOT = "./";
+  // The manifest owns a person's identity (hanzi, years, portrait, colour); an episode
+  // names them and may add a role line of its own.
+  const S = window.SITE || { people: [] };
   const WHO_COLOR = {
     caocao: "#7a2f22", liubei: "#5c6b33", zhouyu: "#33415c", zhugeliang: "#5f6a6a",
     zhangfei: "#2e2e2e", zhaoyun: "#6d7d8a", huanggai: "#7d5426", sunquan: "#54386b",
@@ -64,15 +67,20 @@
   }
 
   function people() {
-    return EP.people.map((p) => `
+    // The site record owns a person's identity; an episode may only add its own role line.
+    const rec = (q) => (S.people || []).find((p) => p.name === q.name) || q;
+    return EP.people.map((q) => {
+      const p = rec(q);
+      return `
     <article class="person">
       <a href="${u("people/" + p.name.toLowerCase().replace(/\s+/g, "-") + "/")}">${pic(p.portrait, `Portrait of ${esc(p.name)}`, 'loading="lazy"')}</a>
       <div class="body">
         <div class="name"><a class="plainlink" href="${u("people/" + p.name.toLowerCase().replace(/\s+/g, "-") + "/")}">${esc(p.name)}</a><span class="hanzi">${esc(p.hanzi)}</span></div>
         <div class="years">${esc(p.years)}</div>
-        <div class="role">${esc(p.role)}</div>
+        <div class="role">${esc(q.role || p.role)}</div>
       </div>
-    </article>`).join("");
+    </article>`;
+    }).join("");
   }
 
   function myths() {

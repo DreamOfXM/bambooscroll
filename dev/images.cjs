@@ -47,9 +47,8 @@ const derive = async (src, stem, r) => {
     console.log(line);
   }
 
-  global.window = {};
-  require(path.join(ROOT, "content/site.js"));
-  const SITE = global.window.SITE;
+  const REG = require(path.join(__dirname, "lines.cjs"))(ROOT);
+  const SITE = REG.SITE;
   const PARCH = "#f3ead8";
   const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -83,7 +82,7 @@ const derive = async (src, stem, r) => {
       <rect width="1200" height="630" fill="${p.color}"/>
       <text x="64" y="268" font-family="Helvetica, Arial, sans-serif" font-size="22" letter-spacing="4" fill="${PARCH}" fill-opacity="0.8">BAMBOO SCROLL</text>
       <text x="62" y="346" font-family="Helvetica, Arial, sans-serif" font-size="66" font-weight="700" fill="#ffffff">${esc(p.name)}</text>
-      <text x="64" y="404" font-family="Helvetica, Arial, sans-serif" font-size="30" letter-spacing="2" fill="${PARCH}" fill-opacity="0.9">${esc(p.hanzi)} · ${esc(p.years)} CE</text>
+      <text x="64" y="404" font-family="Helvetica, Arial, sans-serif" font-size="30" letter-spacing="2" fill="${PARCH}" fill-opacity="0.9">${esc(p.hanzi)} · ${esc(p.years)}</text>
     </svg>`;
     const file = path.join(ROOT, out);
     await sharp(Buffer.from(svg)).composite([{ input: portrait, top: 0, left: 692 }])
@@ -92,34 +91,13 @@ const derive = async (src, stem, r) => {
     console.log(`${out}  ${kb(file)}`);
   };
 
+  // The brand card is the site's identity image, not any one line's art.
   await artCard("assets/og-bamboo-scroll.jpg", "panels/ep01/20-three-banners.png", "centre",
     "FREE ENGLISH WEBCOMICS OF CHINESE HISTORY", "Bamboo Scroll");
-  await artCard("assets/og-three-kingdoms.jpg", "panels/ep01/15-two-banks.png", "centre",
-    "BAMBOO SCROLL · 184–280 CE", "Three Kingdoms");
-  await artCard("assets/og-fire-on-the-yangtze.jpg", "panels/ep01/00-cover.png", "centre",
-    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 1", "Fire on the Yangtze");
-  await artCard("assets/og-road-to-guandu.jpg", "panels/ep02/00-cover.png", "centre",
-    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 2", "The Road to Guandu");
-  await artCard("assets/og-fire-at-yiling.jpg", "panels/ep03/00-cover.png", "centre",
-    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 3", "Fire at Yiling");
-  await artCard("assets/og-the-last-campaign.jpg", "panels/ep04/00-cover.png", "centre",
-    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 4", "The Last Campaign");
-  await artCard("assets/og-the-pass-and-the-river.jpg", "panels/ep05/00-cover.png", "centre",
-    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 5", "The Pass and the River");
-  await artCard("assets/og-the-city-and-the-ford.jpg", "panels/ep06/00-cover.png", "centre",
-    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 6", "The City and the Ford");
-  await artCard("assets/og-the-heights-above-the-river.jpg", "panels/ep07/00-cover.png", "centre",
-    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 7", "The Heights Above the River");
-  await artCard("assets/og-high-water.jpg", "panels/ep08/00-cover.png", "centre",
-    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 8", "High Water");
-  await artCard("assets/og-the-bait-at-shiting.jpg", "panels/ep09/00-cover.png", "centre",
-    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 9", "The Bait at Shiting");
-  await artCard("assets/og-the-gates-at-dawn.jpg", "panels/ep10/00-cover.png", "centre",
-    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 10", "The Gates at Dawn");
-  await artCard("assets/og-the-gate-and-the-trackless-road.jpg", "panels/ep11/00-cover.png", "centre",
-    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 11", "The Gate and the Trackless Road");
-  await artCard("assets/og-the-fall-of-wu.jpg", "panels/ep12/00-cover.png", "centre",
-    "BAMBOO SCROLL · THREE KINGDOMS · EPISODE 12", "The Fall of Wu / The River is One");
+  for (const L of REG.published) {
+    await artCard(L.ogFile, L.ogArt, "centre", "BAMBOO SCROLL · " + L.span, L.name);
+    for (const e of L.eps) await artCard(e.og, e.cover, "centre", e.kicker, e.title);
+  }
   for (const p of SITE.people) {
     await personCard(`assets/og-person-${p.id.replace(/-/g, "")}.jpg`, p);
   }

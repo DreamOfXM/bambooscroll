@@ -8,11 +8,11 @@ window.EP06 = {
   hook: "Sun Quan brought a kingdom's strength against one northern city; a sealed letter, eight hundred picked men at dawn, and one broken bridge decided what the river kept.",
   heroAlt: "At first light an armoured general with a halberd leads a wedge of riders out of the gate of Hefei against a vast encamped army under banners, 215 CE",
   people: [
-    { id: "sunquan", name: "Sun Quan", hanzi: "孫權", years: "182–252", role: "Brought a kingdom's army to Hefei in person, was blunted by a dawn sortie, and left the north bank of Xiaoyao Ford at his horse's one leap.", portrait: "assets/portrait-sunquan.png" },
-    { id: "zhang-liao", name: "Zhang Liao", hanzi: "張遼", years: "169–222", role: "Defender of Hefei. Read the sealed letter, picked eight hundred men who dared to die, and rode at their head to the king's banner. In Wu, his name quieted crying children.", portrait: "assets/portrait-zhangliao.png" },
-    { id: "li-dian", name: "Li Dian", hanzi: "李典", years: "c. 180–215", role: "A scholarly general with a blood feud against Zhang Liao. On the morning that mattered he set it aside: public duty first, private wrong second.", portrait: "assets/portrait-lidian.png" },
-    { id: "yue-jin", name: "Yue Jin", hanzi: "樂進", years: "d. 218", role: "Third general of the garrison, small of build and first over every wall. The sealed letter gave him the quieter half of the plan: hold the city.", portrait: "assets/portrait-yuejin.png" },
-    { id: "ling-tong", name: "Ling Tong", hanzi: "凌統", years: "189–217", role: "At the ford he spent his last hundred men to buy Sun Quan one leap of a horse, and swam back alone in full armour. Died two years later, aged twenty-nine.", portrait: "assets/portrait-lingtong.png" }
+    { name: "Sun Quan", role: "Brought a kingdom's army to Hefei in person, was blunted by a dawn sortie, and left the north bank of Xiaoyao Ford at his horse's one leap." },
+    { name: "Zhang Liao", role: "Defender of Hefei. Read the sealed letter, picked eight hundred men who dared to die, and rode at their head to the king's banner. In Wu, his name quieted crying children." },
+    { name: "Li Dian", role: "A scholarly general with a blood feud against Zhang Liao. On the morning that mattered he set it aside: public duty first, private wrong second." },
+    { name: "Yue Jin", role: "Third general of the garrison, small of build and first over every wall. The sealed letter gave him the quieter half of the plan: hold the city." },
+    { name: "Ling Tong", role: "At the ford he spent his last hundred men to buy Sun Quan one leap of a horse, and swam back alone in full armour. Died two years later, aged twenty-nine." }
   ],
   panels: [
     {

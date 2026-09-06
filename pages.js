@@ -1,19 +1,18 @@
 (function () {
   const S = window.SITE;
-  const EPS = [
-    { num: 1, key: "EP01", path: "read/three-kingdoms/01/" },
-    { num: 2, key: "EP02", path: "read/three-kingdoms/02/" },
-    { num: 3, key: "EP03", path: "read/three-kingdoms/03/" },
-    { num: 4, key: "EP04", path: "read/three-kingdoms/04/" },
-    { num: 5, key: "EP05", path: "read/three-kingdoms/05/" },
-    { num: 6, key: "EP06", path: "read/three-kingdoms/06/" },
-    { num: 7, key: "EP07", path: "read/three-kingdoms/07/" },
-    { num: 8, key: "EP08", path: "read/three-kingdoms/08/" },
-    { num: 9, key: "EP09", path: "read/three-kingdoms/09/" },
-    { num: 10, key: "EP10", path: "read/three-kingdoms/10/" },
-    { num: 11, key: "EP11", path: "read/three-kingdoms/11/" },
-    { num: 12, key: "EP12", path: "read/three-kingdoms/12/" }
-  ].filter((e) => window[e.key]);
+  const pad = (n) => String(n).padStart(2, "0");
+  // Episodes are never listed one by one. A line declares content/<dir>NN.js exposing
+  // window.<key>NN, published at <path>/NN/; whatever is not loaded simply renders
+  // nothing, so a half-finished dynasty cannot advertise itself as complete.
+  const LINES = (S.lines || [])
+    .map((L) => Object.assign({}, L, {
+      eps: Array.from({ length: L.count }, (_, i) => i + 1)
+        .map((n) => ({ num: n, key: L.key + pad(n), path: L.path + "/" + pad(n) + "/", line: L.dynasty }))
+        .filter((e) => window[e.key])
+    }))
+    .filter((L) => L.eps.length);
+  const EPS = LINES.reduce((acc, L) => acc.concat(L.eps), []);
+  const lineOf = (id) => LINES.find((L) => L.dynasty === id);
   let ROOT = "./", PARAM = null;
   const u = (p) => ROOT + String(p == null ? "" : p).replace(/^\/+/, "");
   const pic = (p, alt, extra) => {
@@ -59,12 +58,13 @@
     return `<div class="timeline" id="timeline">` + S.dynasties.map((d) => {
       const span = Math.max(1, d.to - d.from);
       const grow = Math.sqrt(span);
-      const href = d.episodes ? u("dynasty/" + d.id + "/") : u("method/");
-      return `<a class="tl ${d.episodes ? "" : "soon"}" href="${href}" ${d.episodes ? "" : 'aria-disabled="true"'}
+      const live = lineOf(d.id) ? lineOf(d.id).eps.length : 0;
+      const href = live ? u("dynasty/" + d.id + "/") : u("method/");
+      return `<a class="tl ${live ? "" : "soon"}" href="${href}" ${live ? "" : 'aria-disabled="true"'}
         style="flex-grow:${grow.toFixed(2)};background:${d.color}" title="${esc(d.name)}, ${yrs(d)}">
         <span class="tl-name">${esc(d.name)}</span>
         <span class="tl-years">${yrs(d)}</span>
-        <span class="tl-state">${d.episodes ? d.episodes + (d.episodes === 1 ? " episode" : " episodes") : "in production"}</span>
+        <span class="tl-state">${live ? live + (live === 1 ? " episode" : " episodes") : "in production"}</span>
       </a>`;
     }).join("") + `</div>`;
   }
@@ -93,6 +93,10 @@
 
   const PAGES = {
     home() {
+      const first = LINES[0];
+      const newest = LINES[LINES.length - 1];
+      const openWith = window[first.eps[0].key];
+      const jumpTo = newest !== first && window[newest.eps[0].key];
       return `
       <div class="homehero">
         ${pic("panels/ep01/20-three-banners.png", "Three banners on three hills at dawn", 'fetchpriority="high" decoding="async"')}
@@ -100,9 +104,8 @@
         <div class="copy">
           <div class="kicker">Free English webcomics of Chinese history</div>
           <h1>Told from the sources.<br>Not from the novel.</h1>
-          <p class="sub">Every panel traces to the official histories — the Sanguozhi, its fifth-century commentary, the Zizhi Tongjian. Where scholars disagree, the page says so. Free to read, no accounts.</p>
-          <p class="cta"><a class="btn" href="${u("read/three-kingdoms/01/")}">Read Episode 1 · Fire on the Yangtze</a>
-          <a class="plainlink" style="margin-left:16px" href="${u("read/three-kingdoms/02/")}">or start earlier in the years: Episode 2 · The Road to Guandu, 200 CE →</a></p>
+          <p class="sub">Every panel traces to the official histories — the Shiji, the Hanshu, the Hou Han shu, the Sanguozhi and its fifth-century commentary, the Zizhi Tongjian. Where scholars disagree, the page says so. Free to read, no accounts.</p>
+          <p class="cta"><a class="btn" href="${u(first.eps[0].path)}">Start at the beginning · ${esc(openWith.title)}</a>${jumpTo ? ` <a class="plainlink" style="margin-left:16px" href="${u(newest.eps[0].path)}">or the age you may already know: ${esc(newest.heading)}, ${esc(jumpTo.title)} →</a>` : ""}</p>
         </div>
       </div>
       <section class="block">
@@ -110,11 +113,12 @@
         <p class="lede">Drag sideways. Each block's width is the dynasty's length — the Qin is a breath, the Han four centuries. Lit blocks have episodes; dim ones are in production.</p>
         ${timeline()}
       </section>
+      ${LINES.map((L) => `
       <section class="block">
-        <h2>Start here <span class="rule"></span></h2>
-        <p class="lede">Twelve episodes are live, running the whole arc of the age from Guandu (200) to the fall of Wu (280) — read them in order, or start anywhere.</p>
-        <div class="epgrid">${EPS.map((e) => epCard(window[e.key], e.path)).join("")}</div>
-      </section>
+        <h2>${esc(L.heading)} <span class="rule"></span></h2>
+        <p class="lede">${esc(L.lede)}</p>
+        <div class="epgrid">${L.eps.map((e) => epCard(window[e.key], e.path)).join("")}</div>
+      </section>`).join("")}
       <section class="block">
         <h2>The cast so far <span class="rule"></span></h2>
         <p class="lede">Every person page leads into the exact panel they appear in.</p>
@@ -134,18 +138,19 @@
 
     dynasty() {
       const d = dyn(PARAM);
+      const L = lineOf(PARAM);
       const mine = S.people.filter((p) => p.dynasty === PARAM);
       return `
       <section class="block dynhead" style="--dync:${d.color}">
         <div class="kicker">Dynasty</div>
         <h1>${esc(d.name)} <span class="hanzi">${esc(d.hanzi)}</span></h1>
         <div class="dynyears">${yrs(d)}</div>
-        <p class="lede">${esc(d.blurb)} The states were proclaimed from 220; the war that made them began in the last years of Han, and that is where our episodes start.</p>
+        <p class="lede">${esc(d.blurb)} ${esc(d.arc || "")}</p>
       </section>
       <section class="block">
         <h2>Episodes <span class="rule"></span></h2>
         <div class="epgrid">
-          ${EPS.map((e) => epCard(window[e.key], e.path)).join("")}
+          ${L.eps.map((e) => epCard(window[e.key], e.path)).join("")}
         </div>
       </section>
       <section class="block">
@@ -154,7 +159,7 @@
       </section>
       <section class="block">
         <h2>Chronology <span class="rule"></span></h2>
-        <ul class="chrono">${S.chronology.map((c) => `
+        <ul class="chrono">${L.chronology.map((c) => `
           <li><span class="y">${esc(c.year)}</span><span class="t">${esc(c.text)}</span><span class="s">${esc(c.source)}</span></li>`).join("")}
         </ul>
       </section>`;
@@ -185,7 +190,7 @@
           <blockquote class="pquote">${esc(p.sourceQuote.text)}<cite>${esc(p.sourceQuote.source)}</cite></blockquote>
           <h2>Appears in <span class="rule"></span></h2>
           <div class="chips">${p.appearsIn.map((a) => a.panels.map((n) =>
-            `<a class="chip" href="${u(a.ep)}#panel-${n}">Ep ${a.num} · panel ${n}</a>`).join("")).join("")}</div>
+            `<a class="chip" href="${u(a.ep)}#panel-${n}">${esc(dyn(a.ep.split("/")[1]).name)} ${a.num} · panel ${n}</a>`).join("")).join("")}</div>
           <h2>Relations <span class="rule"></span></h2>
           <ul class="rels">${p.relations.map((r) => {
             const o = person(r.to);

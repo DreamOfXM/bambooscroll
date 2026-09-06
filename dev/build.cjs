@@ -12,26 +12,19 @@ const ROOT = path.join(__dirname, "..");
 const BASE = (process.env.BASE || "https://dreamofxm.github.io/bambooscroll").replace(/\/+$/, "");
 const PREFIX = new URL(BASE).pathname.replace(/\/$/, ""); // "" on a user/org root, "/bambooscroll" on a project page
 
-global.window = {};
-require(path.join(ROOT, "content/site.js"));
-require(path.join(ROOT, "content/ep01.js"));
-require(path.join(ROOT, "content/ep02.js"));
-require(path.join(ROOT, "content/ep03.js"));
-require(path.join(ROOT, "content/ep04.js"));
-require(path.join(ROOT, "content/ep05.js"));
-require(path.join(ROOT, "content/ep06.js"));
-require(path.join(ROOT, "content/ep07.js"));
-require(path.join(ROOT, "content/ep08.js"));
-require(path.join(ROOT, "content/ep09.js"));
-require(path.join(ROOT, "content/ep10.js"));
-require(path.join(ROOT, "content/ep11.js"));
-require(path.join(ROOT, "content/ep12.js"));
+const loadLines = require(path.join(__dirname, "lines.cjs"));
+const REG = loadLines(ROOT);
+const S = REG.SITE;
+
+// ---- the episode registry ---------------------------------------------------
+// One manifest entry per published line, declared in content/site.js. Every episode
+// page, og card, breadcrumb, sitemap row and 404 link below is generated from this
+// list, so a new dynasty means content files plus a line entry — never an edit here.
+const DATA = REG.data;
+const LINES = REG.published;
+
 const pages = require(path.join(ROOT, "pages.js"));
 const reader = require(path.join(ROOT, "reader.js"));
-const S = global.window.SITE, EP = global.window.EP01, E2 = global.window.EP02;
-const E3 = global.window.EP03, E4 = global.window.EP04, E5 = global.window.EP05;
-const E6 = global.window.EP06, E7 = global.window.EP07, E8 = global.window.EP08;
-const E9 = global.window.EP09, E10 = global.window.EP10, E11 = global.window.EP11, E12 = global.window.EP12;
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
   .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
@@ -78,13 +71,20 @@ const crumb = (trail) => ({
   })
 });
 
+const isoYear = (y) => (y < 0 ? "-" : "") + String(Math.abs(y)).padStart(4, "0");
+
 const personNode = (p, bare) => {
   const n = { "@type": "Person", name: p.name, alternateName: p.hanzi, url: url("people/" + p.id + "/") };
   if (!bare) {
     n.description = p.role;
     n.image = url(p.portrait.replace(/\.png$/, ".webp"));
-    const yrs = /^(\d+)–(\d+)$/.exec(p.years);
-    if (yrs) { n.birthDate = yrs[1]; n.deathDate = yrs[2]; }
+    // Only a clean range gets dates: "d. 202 CE" or "c. 180–215 CE" is not a birth year.
+    const yrs = /^(\d+)–(\d+)( CE| BCE)$/.exec(p.years);
+    if (yrs) {
+      const sign = yrs[3] === " BCE" ? -1 : 1;
+      n.birthDate = isoYear(sign * +yrs[1]);
+      n.deathDate = isoYear(sign * +yrs[2]);
+    }
   }
   return n;
 };
@@ -118,28 +118,15 @@ const PAGES = [
       publisher: { "@type": "Organization", name: "Bamboo Scroll", url: url(""), logo: url("assets/icon-512.png") }
     }]
   },
-  {
-    path: "/dynasty/three-kingdoms/", file: "dynasty/three-kingdoms/index.html",
-    og: "assets/og-three-kingdoms.jpg", ogAlt: "Two armies on two banks of the Yangtze",
+  ...LINES.map((L) => ({
+    path: "/dynasty/" + L.dynasty + "/", file: "dynasty/" + L.dynasty + "/index.html",
+    og: L.ogFile, ogAlt: L.ogAlt,
     ld: () => [{
-      "@type": "CollectionPage", name: "Three Kingdoms 三國 · Bamboo Scroll", url: url("dynasty/three-kingdoms/"),
-      about: { "@type": "Thing", name: "Three Kingdoms", alternateName: "三國" },
-      hasPart: [
-        { "@type": "ComicStory", name: EP.title, url: url("read/three-kingdoms/01/") },
-        { "@type": "ComicStory", name: E2.title, url: url("read/three-kingdoms/02/") },
-        { "@type": "ComicStory", name: E3.title, url: url("read/three-kingdoms/03/") },
-        { "@type": "ComicStory", name: E4.title, url: url("read/three-kingdoms/04/") },
-        { "@type": "ComicStory", name: E5.title, url: url("read/three-kingdoms/05/") },
-        { "@type": "ComicStory", name: E6.title, url: url("read/three-kingdoms/06/") },
-        { "@type": "ComicStory", name: E7.title, url: url("read/three-kingdoms/07/") },
-        { "@type": "ComicStory", name: E8.title, url: url("read/three-kingdoms/08/") },
-        { "@type": "ComicStory", name: E9.title, url: url("read/three-kingdoms/09/") },
-        { "@type": "ComicStory", name: E10.title, url: url("read/three-kingdoms/10/") },
-        { "@type": "ComicStory", name: E11.title, url: url("read/three-kingdoms/11/") },
-        { "@type": "ComicStory", name: E12.title, url: url("read/three-kingdoms/12/") }
-      ]
-    }, crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"]])]
-  },
+      "@type": "CollectionPage", name: L.name + " " + L.hanzi + " · Bamboo Scroll", url: url("dynasty/" + L.dynasty + "/"),
+      about: { "@type": "Thing", name: L.name, alternateName: L.hanzi },
+      hasPart: L.eps.map((e) => ({ "@type": "ComicStory", name: e.E.title, url: url(e.path) }))
+    }, crumb([HOME, [L.name, "dynasty/" + L.dynasty + "/"]])]
+  })),
   {
     path: "/people/", file: "people/index.html",
     og: "assets/og-bamboo-scroll.jpg", ogAlt: "Three banners on three hills at dawn",
@@ -170,78 +157,17 @@ const PAGES = [
     ld: () => [{ "@type": "AboutPage", name: "Method · Bamboo Scroll", url: url("method/") },
       crumb([HOME, ["Method", "method/"]])]
   },
-  {
-    path: "/read/three-kingdoms/01/", file: "read/three-kingdoms/01/index.html",
-    og: "assets/og-fire-on-the-yangtze.jpg", ogAlt: "Warships in winter mist on the Yangtze, 208 CE",
-    ld: (pg) => [comicStory(EP, "read/three-kingdoms/01/", "assets/og-fire-on-the-yangtze.jpg", pg.lastmod),
-      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 1 · " + EP.title, "read/three-kingdoms/01/"]])]
-  },
-  {
-    path: "/read/three-kingdoms/02/", file: "read/three-kingdoms/02/index.html",
-    og: "assets/og-road-to-guandu.jpg", ogAlt: "Banners and camps of two armies facing each other across the plain at Guandu, 200 CE",
-    ld: (pg) => [comicStory(E2, "read/three-kingdoms/02/", "assets/og-road-to-guandu.jpg", pg.lastmod),
-      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 2 · " + E2.title, "read/three-kingdoms/02/"]])]
-  },
-  {
-    path: "/read/three-kingdoms/03/", file: "read/three-kingdoms/03/index.html",
-    og: "assets/og-fire-at-yiling.jpg", ogAlt: "Stockades burning along the wooded hills above the Yangtze gorges at Yiling, 222 CE",
-    ld: (pg) => [comicStory(E3, "read/three-kingdoms/03/", "assets/og-fire-at-yiling.jpg", pg.lastmod),
-      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 3 · " + E3.title, "read/three-kingdoms/03/"]])]
-  },
-  {
-    path: "/read/three-kingdoms/04/", file: "read/three-kingdoms/04/index.html",
-    og: "assets/og-the-last-campaign.jpg", ogAlt: "Two armies camped on the terraces above the Wei river at the Wuzhang Plains, autumn 234 CE",
-    ld: (pg) => [comicStory(E4, "read/three-kingdoms/04/", "assets/og-the-last-campaign.jpg", pg.lastmod),
-      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 4 · " + E4.title, "read/three-kingdoms/04/"]])]
-  },
-  {
-    path: "/read/three-kingdoms/05/", file: "read/three-kingdoms/05/index.html",
-    og: "assets/og-the-pass-and-the-river.jpg", ogAlt: "The great rammed-earth gate of Tong Pass between the Yellow River and the mountains, banners of the Guanzhong coalition before it, 211 CE",
-    ld: (pg) => [comicStory(E5, "read/three-kingdoms/05/", "assets/og-the-pass-and-the-river.jpg", pg.lastmod),
-      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 5 · " + E5.title, "read/three-kingdoms/05/"]])]
-  },
-  {
-    path: "/read/three-kingdoms/06/", file: "read/three-kingdoms/06/index.html",
-    og: "assets/og-the-city-and-the-ford.jpg", ogAlt: "At first light an armoured general with a halberd leads a wedge of riders out of the gate of Hefei against a vast encamped army under banners, 215 CE",
-    ld: (pg) => [comicStory(E6, "read/three-kingdoms/06/", "assets/og-the-city-and-the-ford.jpg", pg.lastmod),
-      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 6 · " + E6.title, "read/three-kingdoms/06/"]])]
-  },
-  {
-    path: "/read/three-kingdoms/07/", file: "read/three-kingdoms/07/index.html",
-    og: "assets/og-the-heights-above-the-river.jpg", ogAlt: "Banners of Liu Bei's army on the heights of Mount Dingjun above the Mian River, Xiahou Yuan's camp among sharpened stakes below, 219 CE",
-    ld: (pg) => [comicStory(E7, "read/three-kingdoms/07/", "assets/og-the-heights-above-the-river.jpg", pg.lastmod),
-      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 7 · " + E7.title, "read/three-kingdoms/07/"]])]
-  },
-  {
-    path: "/read/three-kingdoms/08/", file: "read/three-kingdoms/08/index.html",
-    og: "assets/og-high-water.jpg", ogAlt: "Guan Yu's tower warships bearing down on the flooded walls of Fancheng as the Han River overflows, autumn 219 CE",
-    ld: (pg) => [comicStory(E8, "read/three-kingdoms/08/", "assets/og-high-water.jpg", pg.lastmod),
-      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 8 · " + E8.title, "read/three-kingdoms/08/"]])]
-  },
-  {
-    path: "/read/three-kingdoms/09/", file: "read/three-kingdoms/09/index.html",
-    og: "assets/og-the-bait-at-shiting.jpg", ogAlt: "In misted hills above a winding mountain road, a commander in Wu armour looks down on a long column of Wei carts and banners strung out through a narrow pass, Shiting 228 CE",
-    ld: (pg) => [comicStory(E9, "read/three-kingdoms/09/", "assets/og-the-bait-at-shiting.jpg", pg.lastmod),
-      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 9 · " + E9.title, "read/three-kingdoms/09/"]])]
-  },
-  {
-    path: "/read/three-kingdoms/10/", file: "read/three-kingdoms/10/index.html",
-    og: "assets/og-the-gates-at-dawn.jpg", ogAlt: "At dawn armoured soldiers haul the great gates of Luoyang shut while in the distance an imperial procession with banners moves away toward the mound tombs on the plain, 249 CE",
-    ld: (pg) => [comicStory(E10, "read/three-kingdoms/10/", "assets/og-the-gates-at-dawn.jpg", pg.lastmod),
-      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 10 · " + E10.title, "read/three-kingdoms/10/"]])]
-  },
-  {
-    path: "/read/three-kingdoms/11/", file: "read/three-kingdoms/11/index.html",
-    og: "assets/og-the-gate-and-the-trackless-road.jpg", ogAlt: "At dawn three columns of tiny Wei soldiers with banners descend separate winding mountain roads toward the mist-filled valleys of Shu, 263 CE",
-    ld: (pg) => [comicStory(E11, "read/three-kingdoms/11/", "assets/og-the-gate-and-the-trackless-road.jpg", pg.lastmod),
-      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 11 · " + E11.title, "read/three-kingdoms/11/"]])]
-  },
-  {
-    path: "/read/three-kingdoms/12/", file: "read/three-kingdoms/12/index.html",
-    og: "assets/og-the-fall-of-wu.jpg", ogAlt: "At dawn a vast fleet of tower ships comes down the Yangtze out of a gorge under streaming banners, one vermilion flagship in the centre, 280 CE",
-    ld: (pg) => [comicStory(E12, "read/three-kingdoms/12/", "assets/og-the-fall-of-wu.jpg", pg.lastmod),
-      crumb([HOME, ["Three Kingdoms", "dynasty/three-kingdoms/"], ["Episode 12 · " + E12.title, "read/three-kingdoms/12/"]])]
-  }
+  // One entry per loaded episode: the og card is named after the title, its alt text is
+  // the cover line the episode already carries, and the breadcrumb hangs off the dynasty.
+  ...LINES.flatMap((L) => L.eps.map((e) => {
+    const E = e.E;
+    return {
+      path: "/" + e.path, file: e.path + "index.html",
+      og: e.og, ogAlt: E.heroAlt || E.panels[0].caption,
+      ld: (pg) => [comicStory(E, e.path, e.og, pg.lastmod),
+        crumb([HOME, [L.name, "dynasty/" + L.dynasty + "/"], ["Episode " + e.num + " · " + E.title, e.path]])]
+    };
+  }))
 ];
 
 function seoBlock(html, pg) {
@@ -285,7 +211,7 @@ function injectSeo(html, block) {
 // ---- build ------------------------------------------------------------------
 
 let written = 0;
-const DATA = ["content/site.js", "content/ep01.js", "content/ep02.js", "content/ep03.js", "content/ep04.js", "content/ep05.js", "content/ep06.js", "content/ep07.js", "content/ep08.js", "content/ep09.js", "content/ep10.js", "content/ep11.js", "content/ep12.js"].map((f) => path.join(ROOT, f));
+const DATAABS = DATA.map((f) => path.join(ROOT, f));
 const iso = (ms) => new Date(ms).toISOString().slice(0, 10);
 // Loaded by every page in the browser, but not content: kept out of lastmod (which feeds
 // sitemap.xml) and folded into the cache-buster instead, so a script-only edit still busts.
@@ -295,7 +221,7 @@ for (const pg of PAGES) {
   const file = path.join(ROOT, pg.file);
   const before = fs.readFileSync(file, "utf8");
   // newest mtime of what actually feeds the page, taken before we rewrite it
-  pg.lastmod = iso(Math.max(...DATA.concat(file).map((f) => fs.statSync(f).mtimeMs)));
+  pg.lastmod = iso(Math.max(...DATAABS.concat(file).map((f) => fs.statSync(f).mtimeMs)));
   let html = before;
 
   const root = (html.match(/data-root="([^"]*)"/) || [])[1] || "./";
@@ -393,18 +319,7 @@ const notFound = `<!doctype html>
       <p class="lede">Nothing lives at this address. What is live so far:</p>
       <ul class="sources">
         <li><a href="${BASE}/">Home</a><span class="when">dynasties · people · method</span></li>
-        <li><a href="${BASE}/read/three-kingdoms/12/">Episode 12 · ${esc(E12.title)}</a><span class="when">280 CE</span></li>
-        <li><a href="${BASE}/read/three-kingdoms/11/">Episode 11 · ${esc(E11.title)}</a><span class="when">263 CE</span></li>
-        <li><a href="${BASE}/read/three-kingdoms/10/">Episode 10 · ${esc(E10.title)}</a><span class="when">249 CE</span></li>
-        <li><a href="${BASE}/read/three-kingdoms/09/">Episode 9 · ${esc(E9.title)}</a><span class="when">228 CE</span></li>
-        <li><a href="${BASE}/read/three-kingdoms/08/">Episode 8 · ${esc(E8.title)}</a><span class="when">219 CE</span></li>
-        <li><a href="${BASE}/read/three-kingdoms/07/">Episode 7 · ${esc(E7.title)}</a><span class="when">217–219 CE</span></li>
-        <li><a href="${BASE}/read/three-kingdoms/06/">Episode 6 · ${esc(E6.title)}</a><span class="when">215 CE</span></li>
-        <li><a href="${BASE}/read/three-kingdoms/05/">Episode 5 · ${esc(E5.title)}</a><span class="when">211 CE</span></li>
-        <li><a href="${BASE}/read/three-kingdoms/04/">Episode 4 · ${esc(E4.title)}</a><span class="when">234 CE</span></li>
-        <li><a href="${BASE}/read/three-kingdoms/03/">Episode 3 · ${esc(E3.title)}</a><span class="when">222 CE</span></li>
-        <li><a href="${BASE}/read/three-kingdoms/02/">Episode 2 · ${esc(E2.title)}</a><span class="when">200 CE</span></li>
-        <li><a href="${BASE}/read/three-kingdoms/01/">Episode 1 · ${esc(EP.title)}</a><span class="when">208 CE</span></li>
+${LINES.slice().reverse().flatMap((L) => L.eps.slice().reverse().map((ep) => `        <li><a href="${BASE}/${ep.path}">${esc(L.name)} ${ep.num} · ${esc(ep.E.title)}</a><span class="when">${esc(ep.E.subtitle)}</span></li>`)).join("\n")}
       </ul>
     </section>
   </main>
