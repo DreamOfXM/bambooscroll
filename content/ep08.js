@@ -8,13 +8,13 @@ window.EP08 = {
   hook: "In the autumn of 219 the rains gave Guan Yu the greatest victory of his life — and within months the same river carried away his army, his province, and his head.",
   heroAlt: "Guan Yu's tower warships bearing down on the flooded walls of Fancheng as the Han River overflows, autumn 219 CE",
   people: [
-    { id: "guanyu", name: "Guan Yu", hanzi: "關羽", years: "d. 220", role: "Marched on Fancheng in 219. The flood gave him seven armies and a might that shook all under heaven; the river behind him gave him nothing back.", portrait: "assets/portrait-guanyu.png" },
-    { id: "lu-meng", name: "Lu Meng", hanzi: "呂蒙", years: "178–220", role: "Sun Quan's commander on the Yangtze. Feigned illness, crossed in merchant dress, and took a province without a pitched battle. Died weeks after the victory.", portrait: "assets/portrait-lumeng.png" },
-    { id: "sunquan", name: "Sun Quan", hanzi: "孫權", years: "182–252", role: "Refused once by Guan Yu's envoy, and never forgot it. Promised Cao Cao his service, and sent Lu Meng across the river in white.", portrait: "assets/portrait-sunquan.png" },
-    { id: "caocao", name: "Cao Cao", hanzi: "曹操", years: "155–220", role: "Held the north from a distance. Sent seven armies to raise the siege, heard the counsel to move the capital, and took instead the advice that made an ally of the man across the river. Buried Guan Yu's head at Luoyang with the honours of a marquis.", portrait: "assets/portrait-caocao.png" },
-    { id: "luxun", name: "Lu Xun", hanzi: "陸遜", years: "183–245", role: "Put at Lukou at thirty-six, a name Guan Yu thought beneath notice. Wrote the humble letters that emptied the river defences.", portrait: "assets/portrait-luxun.png" },
-    { id: "cao-ren", name: "Cao Ren", hanzi: "曹仁", years: "168–223", role: "Cao Cao's cousin, holding Fancheng against the flood. Bailed the walls and would not go; the siege broke around him, not through him.", portrait: "assets/portrait-caoren.png" },
-    { id: "yu-jin", name: "Yu Jin", hanzi: "于禁", years: "d. 221", role: "The senior veteran of Cao Cao's frontier wars. The rains drowned the seven armies he brought to Fancheng; he surrendered, and lived to be ashamed of it.", portrait: "assets/portrait-yujin.png" }
+    { name: "Guan Yu", role: "Marched on Fancheng in 219. The flood gave him seven armies and a might that shook all under heaven; the river behind him gave him nothing back." },
+    { name: "Lu Meng", role: "Sun Quan's commander on the Yangtze. Feigned illness, crossed in merchant dress, and took a province without a pitched battle. Died weeks after the victory." },
+    { name: "Sun Quan", role: "Refused once by Guan Yu's envoy, and never forgot it. Promised Cao Cao his service, and sent Lu Meng across the river in white." },
+    { name: "Cao Cao", role: "Held the north from a distance. Sent seven armies to raise the siege, heard the counsel to move the capital, and took instead the advice that made an ally of the man across the river. Buried Guan Yu's head at Luoyang with the honours of a marquis." },
+    { name: "Lu Xun", role: "Put at Lukou at thirty-six, a name Guan Yu thought beneath notice. Wrote the humble letters that emptied the river defences." },
+    { name: "Cao Ren", role: "Cao Cao's cousin, holding Fancheng against the flood. Bailed the walls and would not go; the siege broke around him, not through him." },
+    { name: "Yu Jin", role: "The senior veteran of Cao Cao's frontier wars. The rains drowned the seven armies he brought to Fancheng; he surrendered, and lived to be ashamed of it." }
   ],
   panels: [
     {

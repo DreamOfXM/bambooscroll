@@ -8,11 +8,11 @@ window.EP10 = {
   hook: "The emperor rode out to pray at the tombs; behind him an old man who had been dying for two years closed the gates of the capital — by nightfall the regent had surrendered, and within ten days he was dead.",
   heroAlt: "At dawn armoured soldiers haul the great gates of Luoyang shut while in the distance an imperial procession with banners moves away toward the mound tombs on the plain, 249 CE",
   people: [
-    { id: "simayi", name: "Sima Yi", hanzi: "司馬懿", years: "179–251", role: "Regent of Wei, demoted to the empty seat of Grand Tutor. Feigned illness for two years, rose in a single morning, took the capital without a fight and broke his oath within ten days. Died two years later with his house ruling in his place.", portrait: "assets/portrait-simayi.png" },
-    { id: "cao-shuang", name: "Cao Shuang", hanzi: "曹爽", years: "d. 249", role: "Co-regent and kinsman of the imperial house. Held the court through his brothers and favourites, pushed Sima Yi aside, and rode out of the city on the morning that mattered. Surrendered on a promise of safety; executed with his faction ten days later.", portrait: "assets/portrait-caoshuang.png" },
-    { id: "cao-fang", name: "Cao Fang", hanzi: "曹芳", years: "c. 231–274", role: "Emperor of Wei from the age of eight. Rode out to the Gaoping Tombs and rode back a guest in his own palace; deposed by the Sima house in 254, he died in retirement in 274.", portrait: "assets/portrait-caofang.png" },
-    { id: "jiang-ji", name: "Jiang Ji", hanzi: "蔣濟", years: "d. 249", role: "Veteran minister whose name gave weight to an oath. His letter to the camp promised Cao Shuang no more than the loss of office; he watched the promise break, and died of remorse within months.", portrait: "assets/portrait-jiangji.png" },
-    { id: "sima-shi", name: "Sima Shi", hanzi: "司馬師", years: "208–255", role: "Sima Yi's elder son. Quietly gathered three thousand sworn retainers who answered when the gates closed; after his father's death he ruled Wei in all but name.", portrait: "assets/portrait-simashi.png" }
+    { name: "Sima Yi", role: "Regent of Wei, demoted to the empty seat of Grand Tutor. Feigned illness for two years, rose in a single morning, took the capital without a fight and broke his oath within ten days. Died two years later with his house ruling in his place." },
+    { name: "Cao Shuang", role: "Co-regent and kinsman of the imperial house. Held the court through his brothers and favourites, pushed Sima Yi aside, and rode out of the city on the morning that mattered. Surrendered on a promise of safety; executed with his faction ten days later." },
+    { name: "Cao Fang", role: "Emperor of Wei from the age of eight. Rode out to the Gaoping Tombs and rode back a guest in his own palace; deposed by the Sima house in 254, he died in retirement in 274." },
+    { name: "Jiang Ji", role: "Veteran minister whose name gave weight to an oath. His letter to the camp promised Cao Shuang no more than the loss of office; he watched the promise break, and died of remorse within months." },
+    { name: "Sima Shi", role: "Sima Yi's elder son. Quietly gathered three thousand sworn retainers who answered when the gates closed; after his father's death he ruled Wei in all but name." }
   ],
   panels: [
     {

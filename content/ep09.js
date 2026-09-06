@@ -8,11 +8,11 @@ window.EP09 = {
   hook: "A Wu official offered Cao Xiu his head of hair as the price of treason; a hundred thousand Wei soldiers followed the bait into the mountains, and Lu Xun was waiting at the end of the road.",
   heroAlt: "In misted hills above a winding mountain road, a commander in Wu armour looks down on a long column of Wei carts and banners strung out through a narrow pass, Shiting 228 CE",
   people: [
-    { id: "lu-xun", name: "Lu Xun", hanzi: "陸遜", years: "183–245", role: "Grand commander of Wu at Shiting. Six years after burning Liu Bei out of the gorges, he closed the trap on Wei's main eastern army in a single morning.", portrait: "assets/portrait-luxun.png" },
-    { id: "sunquan", name: "Sun Quan", hanzi: "孫權", years: "182–252", role: "King of Wu. Approved one man's offer of treason, gave him his own hair to cut, and let a scholar command the whole eastern front a second time.", portrait: "assets/portrait-sunquan.png" },
-    { id: "zhou-fang", name: "Zhou Fang", hanzi: "周魴", years: "d. c. 228", role: "Grand Administrator of Poyang. Sent seven articles of false intelligence, cut his hair before his own king, and pulled a hundred thousand men into an ambush.", portrait: "assets/portrait-zhoufang.png" },
-    { id: "cao-xiu", name: "Cao Xiu", hanzi: "曹休", years: "d. 228", role: "Cousin of the Wei house and commander of the eastern front. Believed the defector, marched deepest of the three Wei armies, and died within the year.", portrait: "assets/portrait-caoxiu.png" },
-    { id: "jia-kui", name: "Jia Kui", hanzi: "賈逵", years: "d. 228", role: "Governor of Yuzhou on Wei's eastern flank. Warned, marched anyway, arrived too late for the battle — and just in time to save Cao Xiu.", portrait: "assets/portrait-jiakui.png" }
+    { name: "Lu Xun", role: "Grand commander of Wu at Shiting. Six years after burning Liu Bei out of the gorges, he closed the trap on Wei's main eastern army in a single morning." },
+    { name: "Sun Quan", role: "King of Wu. Approved one man's offer of treason, gave him his own hair to cut, and let a scholar command the whole eastern front a second time." },
+    { name: "Zhou Fang", role: "Grand Administrator of Poyang. Sent seven articles of false intelligence, cut his hair before his own king, and pulled a hundred thousand men into an ambush." },
+    { name: "Cao Xiu", role: "Cousin of the Wei house and commander of the eastern front. Believed the defector, marched deepest of the three Wei armies, and died within the year." },
+    { name: "Jia Kui", role: "Governor of Yuzhou on Wei's eastern flank. Warned, marched anyway, arrived too late for the battle — and just in time to save Cao Xiu." }
   ],
   panels: [
     {

@@ -8,10 +8,10 @@ window.EP12 = {
   hook: "Seven years of ships, one river of iron, and a last emperor who came to the camp gate with his hands bound — in the spring of 280 the Yangtze carried an empire down to the sea, and the Three Kingdoms ended.",
   heroAlt: "At dawn a vast fleet of tower ships comes down the Yangtze out of a gorge under streaming banners, one vermilion flagship in the centre, 280 CE",
   people: [
-    { id: "wang-jun", name: "Wang Jun", hanzi: "王濬", years: "206–285", role: "Governor of Yi Province who spent seven years building the great fleet, melted the river's iron chains with torches of sesame oil, and sailed into Shitou to receive the last emperor's surrender.", portrait: "assets/portrait-wangjun.png" },
-    { id: "sima-yan", name: "Sima Yan", hanzi: "司馬炎", years: "236–290", role: "Grandson of Sima Yi. Took the throne from Wei in 265 as first emperor of Jin, decided on Wu at the go board, and received Sun Hao's surrender at Luoyang.", portrait: "assets/portrait-simayan.png" },
-    { id: "sun-hao", name: "Sun Hao", hanzi: "孫皓", years: "242–284", role: "Grandson of Sun Quan and last emperor of Wu. Ruled with flayed faces and gouged eyes; met the invasion with a surrender, and died the Marquis of Guiming at Luoyang.", portrait: "assets/portrait-sunhao.png" },
-    { id: "du-yu", name: "Du Yu", hanzi: "杜預", years: "222–285", role: "Grand general of the south who took Jiangling and said the war would open like split bamboo. A soldier with a scholar's library — the age called him the Armory.", portrait: "assets/portrait-duyu.png" }
+    { name: "Wang Jun", role: "Governor of Yi Province who spent seven years building the great fleet, melted the river's iron chains with torches of sesame oil, and sailed into Shitou to receive the last emperor's surrender." },
+    { name: "Sima Yan", role: "Grandson of Sima Yi. Took the throne from Wei in 265 as first emperor of Jin, decided on Wu at the go board, and received Sun Hao's surrender at Luoyang." },
+    { name: "Sun Hao", role: "Grandson of Sun Quan and last emperor of Wu. Ruled with flayed faces and gouged eyes; met the invasion with a surrender, and died the Marquis of Guiming at Luoyang." },
+    { name: "Du Yu", role: "Grand general of the south who took Jiangling and said the war would open like split bamboo. A soldier with a scholar's library — the age called him the Armory." }
   ],
   panels: [
     {

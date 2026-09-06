@@ -8,9 +8,9 @@ window.EP04 = {
   hook: "Five roads over the Qinling in seven years, and every one of them died on the grain. The last ended against a general who would not fight — and a grave in the mountain, just big enough for a coffin.",
   heroAlt: "Two armies camped on the terraces above the Wei river at the Wuzhang Plains, autumn 234 CE",
   people: [
-    { id: "zhugeliang", name: "Zhuge Liang", hanzi: "諸葛亮", years: "181–234", role: "Chancellor of Shu-Han. Five expeditions north, one grave in Mount Dingjun, and an appraisal that praises the administrator first.", portrait: "assets/portrait-zhugeliang.png" },
-    { id: "simayi", name: "Sima Yi", hanzi: "司馬懿", years: "179–251", role: "Wei's commander in the west from 231. Refused battle at the Wuzhang Plains, outlived his enemy, and left his house the empire.", portrait: "assets/portrait-simayi.png" },
-    { id: "sunquan", name: "Sun Quan", hanzi: "孫權", years: "182–252", role: "Agreed the two-front war for 234, marched on Hefei's new city, and was turned back by an emperor and a sickness.", portrait: "assets/portrait-sunquan.png" }
+    { name: "Zhuge Liang", role: "Chancellor of Shu-Han. Five expeditions north, one grave in Mount Dingjun, and an appraisal that praises the administrator first." },
+    { name: "Sima Yi", role: "Wei's commander in the west from 231. Refused battle at the Wuzhang Plains, outlived his enemy, and left his house the empire." },
+    { name: "Sun Quan", role: "Agreed the two-front war for 234, marched on Hefei's new city, and was turned back by an emperor and a sickness." }
   ],
   panels: [
     {
