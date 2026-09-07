@@ -28,6 +28,8 @@
   const yrs = (d) => (d.from < 0 ? Math.abs(d.from) + " BCE" : d.from + " CE") + " – " + d.to + " CE";
   const dyn = (id) => S.dynasties.find((d) => d.id === id);
   const person = (id) => S.people.find((p) => p.id === id);
+  const EMAIL = (S.contact || {}).email || "";
+  const mail = (subject) => `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}`;
 
   function nav() {
     return `
@@ -49,7 +51,8 @@
       <b>Bamboo Scroll</b> — free English webcomics of Chinese history, organised by dynasty and by person.<br>
       Told only from the official histories. The Ming romances of the Han and of the Three Kingdoms, the anecdote collections, and the stage plays drawn from them are used nowhere as a source; they appear only in Myth Checks, as a correction.<br>
       Art is generated from our own original character models under our own art direction. Research, script, sourcing and editing are human. No artwork is taken from any other creator.<br>
-      © 2026 Bamboo Scroll. All rights reserved. Teachers and students may print, share and translate these comics for non-commercial classroom use, with credit. For any other reuse — including commercial — please ask; we almost always say yes.<br>
+      © 2026 Bamboo Scroll. All rights reserved. Teachers and students may print, share and translate these comics for non-commercial classroom use, with credit. For any other reuse — including commercial — <a class="plainlink" href="${mail("Bamboo Scroll: reuse permission")}">ask us</a>; we almost always say yes.<br>
+      A date, a name, a place, a number or a translation that does not match the source, or any other comment: <a class="plainlink" href="${mail("Bamboo Scroll")}">${EMAIL}</a>. Every claim here carries its book and chapter, so a mistake is checkable, and a good correction goes into the page.<br>
       Free to read. No accounts. We count page views and how far you read — anonymous traffic statistics, nothing personal.
     </div>`;
   }
@@ -245,6 +248,8 @@
         <h2>Art and licence <span class="rule"></span></h2>
         <p class="lede">All artwork is generated from our own original character models under our own art direction; no image is downloaded, traced or borrowed from any other creator. Research, script, sourcing and editing are human. Text and art are original to this site and all rights are reserved; teachers and students may reuse them for non-commercial classroom use with credit — see the footer.</p>
         <p class="lede">Translations from the classical Chinese are our own; no published translation is reused.</p>
+        <h2>Corrections <span class="rule"></span></h2>
+        <p class="lede">Citing the book and chapter is what makes it possible for us to be wrong in a checkable way. If a date, a name, a place, a number or a translation here does not match the record, <a class="plainlink" href="${mail("Bamboo Scroll: correction")}">write to ${EMAIL}</a> with the episode and the panel, or the name on the person's page; a correction that holds against the source goes into the page. The same address takes suggestions for what the line should cover next.</p>
       </section>`;
     }
   };

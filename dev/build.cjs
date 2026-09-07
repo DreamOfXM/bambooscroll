@@ -248,6 +248,11 @@ for (const pg of PAGES) {
       html = fill(html, id, out[id]);
       filled.push(id);
     }
+    // One footer, one source. Reader shells used to carry a hand-written copy, so any
+    // site-wide change to it silently missed all 25 of them.
+    pages.setContext(root, param);
+    html = fill(html, "foot", pages.foot());
+    filled.push("foot");
   }
 
   html = injectSeo(html, seoBlock(html, pg));

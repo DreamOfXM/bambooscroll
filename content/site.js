@@ -1,4 +1,7 @@
 window.SITE = {
+  // The only place the published contact address lives. The footer and the Method page both
+  // read it from here, so moving to our own domain later is a one-line change.
+  contact: { email: "hnyxgxm2023@gmail.com" },
   dynasties: [
     { id: "qin", name: "Qin", hanzi: "秦", from: -221, to: -206, color: "#3d3a35", blurb: "The first empire, and the shortest." },
     { id: "han", name: "Han", hanzi: "漢", from: -206, to: 220, color: "#7a2f22", blurb: "Four centuries that gave China its name.", arc: "Our episodes begin with the rebel army that took the Qin capital in 206 BCE and end in 184 CE, the year the empire's provinces stopped obeying it — the year the Three Kingdoms block below opens." },
