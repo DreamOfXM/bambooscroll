@@ -100,20 +100,41 @@
       const newest = LINES[LINES.length - 1];
       const openWith = window[first.eps[0].key];
       const jumpTo = newest !== first && window[newest.eps[0].key];
+      const threeKingdoms = lineOf("three-kingdoms");
+      const threeKingdomsFirst = threeKingdoms && window[threeKingdoms.eps[0].key];
+      const threeKingdomsSecond = threeKingdoms && window[threeKingdoms.eps[1].key];
       return `
-      <div class="homehero">
+      <div class="homehero homehero-season">
         ${pic("panels/ep01/20-three-banners.png", "Three banners on three hills at dawn", 'fetchpriority="high" decoding="async"')}
         <div class="veil"></div>
         <div class="copy">
-          <div class="kicker">Free English webcomics of Chinese history</div>
-          <h1>Told from the sources.<br>Not from the novel.</h1>
-          <p class="sub">Every panel traces to the official histories — the Shiji, the Hanshu, the Hou Han shu, the Sanguozhi and its fifth-century commentary, the Zizhi Tongjian. Where scholars disagree, the page says so. Free to read, no accounts.</p>
-          <p class="cta"><a class="btn" href="${u(first.eps[0].path)}">Start at the beginning · ${esc(openWith.title)}</a>${jumpTo ? ` <a class="plainlink" style="margin-left:16px" href="${u(newest.eps[0].path)}">or the age you may already know: ${esc(newest.heading)}, ${esc(jumpTo.title)} →</a>` : ""}</p>
+          <div class="kicker">Bamboo Scroll · a source-backed history comic</div>
+          <h1>The Three Kingdoms,<br>before the legend.</h1>
+          <p class="sub">A free English comic about the people, wars and choices that broke the Han empire — told from the histories, not from the novel.</p>
+          <p class="cta"><a class="btn" href="${u(threeKingdomsFirst.path)}">Begin the Three Kingdoms · ${esc(threeKingdomsFirst.title)}</a> <a class="plainlink homehero-link" href="${u("dynasty/three-kingdoms/")}">See the whole story →</a></p>
+          <div class="hero-proof"><span>12 episodes</span><span>184–280 CE</span><span>Every line sourced</span></div>
         </div>
       </div>
+      <section class="season-intro">
+        <div class="season-copy">
+          <div class="kicker">The first season</div>
+          <h2>Three Kingdoms: history behind the legend</h2>
+          <p>Start with Red Cliff, follow the river through Guandu, Yiling and Hanzhong, and watch three names become one empire again. Each episode takes about seven minutes to read.</p>
+          <a class="plainlink" href="${u("dynasty/three-kingdoms/")}">Open the Three Kingdoms timeline and cast →</a>
+        </div>
+        <div class="season-cards">
+          ${epCard(threeKingdomsFirst, threeKingdoms.eps[0].path)}
+          ${epCard(threeKingdomsSecond, threeKingdoms.eps[1].path)}
+        </div>
+      </section>
+      <section class="block home-guidance">
+        <div class="guidance-card"><span class="guidance-num">01</span><b>Read the story</b><span>Short, illustrated episodes for curious readers.</span></div>
+        <div class="guidance-card"><span class="guidance-num">02</span><b>Meet the people</b><span>Follow Cao Cao, Liu Bei, Sun Quan and the people around them.</span></div>
+        <div class="guidance-card"><span class="guidance-num">03</span><b>Check the legend</b><span>Myth Checks show where the famous novel parts ways with the record.</span></div>
+      </section>
       <section class="block">
         <h2>The dynasties <span class="rule"></span></h2>
-        <p class="lede">Drag sideways. Each block's width is the dynasty's length — the Qin is a breath, the Han four centuries. Lit blocks have episodes; dim ones are in production.</p>
+        <p class="lede">The Three Kingdoms are the first season. The wider scroll will continue backward and forward through Chinese history.</p>
         ${timeline()}
       </section>
       ${LINES.map((L) => `

@@ -217,7 +217,10 @@ header.site .bar a.brand { color: inherit; text-decoration: none; }
 .homehero .kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #d8b48a; }
 .homehero h1 { margin: 12px 0 10px; font-size: clamp(36px, 6.4vw, 68px); line-height: 1.03; letter-spacing: -0.02em; }
 .homehero .sub { max-width: 640px; color: #cfc6b4; font-size: 16px; line-height: 1.6; font-style: italic; }
-.homehero .cta { margin: 20px 0 0; }
+.homehero .cta { margin: 20px 0 0; display: flex; align-items: center; flex-wrap: wrap; gap: 14px 18px; }
+.homehero-link { color: #f0d6b3; border-bottom-color: rgba(240, 214, 179, 0.45); }
+.hero-proof { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #d8cbb8; }
+.hero-proof span { padding: 5px 9px; border: 1px solid rgba(244, 240, 230, 0.25); }
 .btn {
   display: inline-block; padding: 13px 22px; background: var(--vermilion); color: #fbf8f0;
   font-family: var(--serif); font-size: 16px; text-decoration: none; letter-spacing: 0.01em;
@@ -226,6 +229,17 @@ header.site .bar a.brand { color: inherit; text-decoration: none; }
 }
 .btn:hover { background: #96331f; transform: translate(-1px, -1px); box-shadow: 4px 4px 0 rgba(12, 10, 8, 0.5); }
 
+.season-intro { max-width: 1180px; margin: 0 auto; padding: 58px 20px 34px; display: grid; grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.5fr); gap: 34px; align-items: center; }
+.season-copy { max-width: 430px; }
+.season-copy .kicker, .home-guidance .kicker { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--vermilion); }
+.season-copy h2 { font-size: clamp(28px, 4vw, 44px); line-height: 1.06; margin: 10px 0 14px; }
+.season-copy p { color: var(--ink-soft); line-height: 1.65; margin: 0 0 18px; }
+.season-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.home-guidance { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding-top: 18px; padding-bottom: 32px; }
+.guidance-card { display: grid; grid-template-columns: 34px 1fr; column-gap: 10px; padding: 15px 16px; border-top: 2px solid var(--vermilion); background: var(--card); }
+.guidance-card .guidance-num { grid-row: span 2; font-family: var(--mono); font-size: 11px; color: var(--vermilion); }
+.guidance-card b { font-size: 16px; }
+.guidance-card span:last-child { color: var(--ink-soft); font-size: 13px; line-height: 1.45; margin-top: 5px; }
 .timeline { display: flex; gap: 4px; overflow-x: auto; padding: 6px 2px 14px; }
 .tl {
   flex-basis: 0; min-width: 96px; border-radius: 4px; padding: 12px 9px 10px;
@@ -316,6 +330,8 @@ header.site .bar a.brand { color: inherit; text-decoration: none; }
 .rules li { font-size: 15px; line-height: 1.7; color: var(--ink-soft); margin-bottom: 6px; }
 
 @media (max-width: 980px) {
+  .season-intro { grid-template-columns: 1fr; }
+  .season-copy { max-width: 620px; }
   .epgrid, .trustgrid { grid-template-columns: 1fr 1fr; }
   .persongrid { grid-template-columns: 1fr; gap: 20px; }
   .pleft { position: static; max-width: 340px; }
@@ -323,6 +339,10 @@ header.site .bar a.brand { color: inherit; text-decoration: none; }
   .links { gap: 12px; margin-left: 12px; }
 }
 @media (max-width: 620px) {
+  .season-intro { padding-top: 40px; }
+  .season-cards, .home-guidance { grid-template-columns: 1fr; }
+  .homehero .copy { min-height: min(78vh, 650px); }
+  .hero-proof { gap: 6px; }
   .epgrid, .trustgrid { grid-template-columns: 1fr; }
   .epgrid.one .epcard { grid-template-columns: 1fr; }
   .epgrid.one .epcard img { height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
