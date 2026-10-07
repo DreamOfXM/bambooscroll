@@ -49,6 +49,7 @@
     return `
     <div class="inner">
       <b>Bamboo Scroll</b> — free English webcomics of Chinese history, organised by dynasty and by person.<br>
+      From the same maker: <a class="plainlink" href="https://dreamofxm.github.io/chinese-literature/">Four Great Chinese Novels</a> — character tables and family trees, chapter by chapter.<br>
       Told only from the official histories. The Ming romances of the Han and of the Three Kingdoms, the anecdote collections, and the stage plays drawn from them are used nowhere as a source; they appear only in Myth Checks, as a correction.<br>
       Art is generated from our own original character models under our own art direction. Research, script, sourcing and editing are human. No artwork is taken from any other creator.<br>
       © 2026 <a class="plainlink" href="${S.url}"><b>Bamboo Scroll</b> · ${String(S.url).replace(/^https?:\/\//, "")}</a>. All rights reserved. Teachers and students may print, share and translate these comics for non-commercial classroom use, with credit. For any other reuse — including commercial — <a class="plainlink" href="${mail("Bamboo Scroll: reuse permission")}">ask us</a>; we almost always say yes.<br>
